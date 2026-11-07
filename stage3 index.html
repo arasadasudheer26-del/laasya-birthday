@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2a101d">
+<title>Our Beautiful Memories ❤️</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@500;600&display=swap');
+
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;color:#fff2e9;
+ font-family:Georgia,serif;text-align:center;
+ background:radial-gradient(ellipse at 50% 10%,#6b3548,#321522 55%,#160a12);
+ overflow-x:hidden;
+}
+.shell{width:min(100%,600px);margin:auto;padding:30px 14px}
+.kicker{font-size:11px;letter-spacing:4px;color:#e9c77b;text-transform:uppercase}
+h1{font:italic 43px 'Great Vibes',cursive;color:#f5c8d2;margin:15px 0}
+.sub{font-size:18px;color:#f8e1df;line-height:1.5}
+.count{font-size:12px;letter-spacing:2px;color:#e9c77b;margin:18px}
+.stage{
+ height:min(58vh,430px);min-height:300px;
+ position:relative;display:flex;align-items:center;
+ justify-content:center;perspective:1000px;
+}
+.card{
+ position:absolute;width:min(65vw,250px);
+ height:min(83vw,320px);max-height:320px;
+ padding:8px 8px 34px;border:1px solid #e9c77b;
+ border-radius:12px;background:#fff7ec;
+ box-shadow:0 18px 45px #0008;overflow:hidden;
+ cursor:pointer;
+ transition:transform .9s cubic-bezier(.18,.78,.18,1),opacity .8s;
+}
+.card img{width:100%;height:100%;object-fit:cover;border-radius:7px}
+.card span{position:absolute;bottom:8px;left:8px;right:8px;color:#492632;font-size:13px}
+.card.top{animation:float 2.8s ease-in-out infinite}
+@keyframes float{50%{margin-top:-8px}}
+.fly-left{transform:translate(-125vw,-10vh) rotate(-22deg)!important;opacity:0}
+.fly-right{transform:translate(125vw,8vh) rotate(22deg)!important;opacity:0}
+.fly-up{transform:translate(0,-125vh) rotate(12deg)!important;opacity:0}
+.fly-down{transform:translate(0,125vh) rotate(-12deg)!important;opacity:0}
+.fly-diag{transform:translate(115vw,-115vh) rotate(28deg)!important;opacity:0}
+
+.hint{font-size:15px;color:#f3d4d5;margin:12px}
+.dots{display:flex;justify-content:center;gap:9px;margin:18px}
+.dots i{width:8px;height:8px;border:1px solid #e9c77b;border-radius:50%}
+
+.collage{
+ display:none;position:relative;width:min(94vw,510px);
+ height:min(60vh,480px);min-height:350px;margin:15px auto;
+}
+.collage.show{display:block;animation:appear 1s ease}
+.photo{
+ position:absolute;background:#fff7ec;padding:6px 6px 22px;
+ border:1px solid #e9c77b;box-shadow:0 12px 28px #0009;
+ opacity:0;transform:scale(.3) rotate(var(--r));
+ transition:all .8s cubic-bezier(.16,.8,.2,1);
+}
+.photo img{width:100%;height:100%;object-fit:cover}
+.photo:nth-child(1){left:3%;top:5%;width:43%;height:45%;--r:-8deg}
+.photo:nth-child(2){right:3%;top:3%;width:43%;height:45%;--r:7deg}
+.photo:nth-child(3){left:29%;top:26%;width:42%;height:47%;--r:-2deg;z-index:2}
+.photo:nth-child(4){left:3%;bottom:2%;width:40%;height:43%;--r:7deg}
+.photo:nth-child(5){right:3%;bottom:2%;width:40%;height:43%;--r:-7deg}
+.collage.show .photo{opacity:1;transform:scale(1) rotate(var(--r))}
+.collage.show .photo:nth-child(2){transition-delay:.12s}
+.collage.show .photo:nth-child(3){transition-delay:.24s}
+.collage.show .photo:nth-child(4){transition-delay:.36s}
+.collage.show .photo:nth-child(5){transition-delay:.48s}
+
+.final{display:none;font:italic 25px 'Great Vibes',cursive;color:#f5c8d2;margin:20px}
+button{
+ border:1px solid #e9c77b;border-radius:25px;padding:12px 20px;
+ font:15px 'Playfair Display',serif;cursor:pointer;margin:8px;
+}
+.back{background:#ffffff12;color:#fff0e8}
+.replay{background:linear-gradient(110deg,#f6dca0,#e9a9b8);color:#351523;display:none}
+
+.heart-layer{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:10}
+.heart{
+ position:absolute;top:-40px;left:var(--x);font-size:var(--size);
+ color:var(--tone);text-shadow:0 0 12px #f8b7c9aa;
+ animation:fall var(--duration) linear var(--delay) forwards;
+}
+@keyframes fall{
+ 0%{transform:translateY(-30px) rotate(0);opacity:0}
+ 10%{opacity:1}
+ 100%{transform:translate(var(--drift),110vh) rotate(300deg);opacity:0}
+}
+@keyframes appear{
+ from{opacity:0;transform:scale(.7)}
+ to{opacity:1;transform:scale(1)}
+}
+@media(max-height:680px){
+ .stage{height:285px;min-height:285px}
+ .card{width:195px;height:250px}
+ .collage{height:330px;min-height:330px}
+}
+</style>
+</head>
+
+<body>
+<div class="heart-layer" id="heartLayer"></div>
+
+<main class="shell">
+ <div class="kicker">A little box full of us</div>
+ <h1>Our Beautiful Memories</h1>
+ <p class="sub" id="subtitle">Five little moments, one endless love story.</p>
+
+ <div class="count" id="count">MEMORY 1 OF 5</div>
+ <div class="stage" id="stage"></div>
+
+ <div class="hint" id="hint">♡ Touch the top photo to reveal it ♡</div>
+ <div class="dots" id="dots">
+  <i></i><i></i><i></i><i></i><i></i>
+ </div>
+
+ <div class="collage" id="collage"></div>
+ <div class="final" id="final">
+  Every picture holds a piece of my heart ❤️
+ </div>
+
+ <button class="back" onclick="goBack()">← Back to Stage 2</button>
+ <button class="replay" id="replay" onclick="setup();hearts(34)">
+  Watch Again ✨
+ </button>
+</main>
+
+<script>
+const photos=[
+ {src:"images/IMG_9391 (1).JPG",caption:"A moment to keep forever"},
+ {src:"images/file_00000000c2147208aa1a05f858bed023 (1).png",caption:"Our little world"},
+ {src:"images/file_00000000db6071f88186a5fd9fb5163e (1).png",caption:"A beautiful memory"},
+ {src:"images/1752173061775 (1).jpg",caption:"Every moment with you"},
+ {src:"images/Snapchat-1781418884 (1).jpg",caption:"One smile, endless memories"}
+];
+
+const stage=document.getElementById("stage");
+const count=document.getElementById("count");
+const hint=document.getElementById("hint");
+const dots=[...document.querySelectorAll("#dots i")];
+const collage=document.getElementById("collage");
+const subtitle=document.getElementById("subtitle");
+const finalText=document.getElementById("final");
+const replay=document.getElementById("replay");
+
+let index=0;
+let cards=[];
+
+function hearts(amount=24){
+ const layer=document.getElementById("heartLayer");
+ const symbols=["♥","♡","❤","💕","💗"];
+ const tones=["#ffd7e2","#f4b6c8","#e9c77b","#fff0e4"];
+
+ for(let i=0;i<amount;i++){
+  const h=document.createElement("span");
+  h.className="heart";
+  h.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+  h.style.setProperty("--x",Math.random()*100+"vw");
+  h.style.setProperty("--size",12+Math.random()*22+"px");
+  h.style.setProperty("--tone",tones[Math.floor(Math.random()*tones.length)]);
+  h.style.setProperty("--duration",3.2+Math.random()*3.2+"s");
+  h.style.setProperty("--delay",Math.random()*.9+"s");
+  h.style.setProperty("--drift",-65+Math.random()*130+"px");
+  layer.appendChild(h);
+  setTimeout(()=>h.remove(),7500);
+ }
+}
+
+function setup(){
+ index=0;
+ stage.innerHTML="";
+ collage.className="collage";
+ collage.innerHTML="";
+ collage.style.display="none";
+ finalText.style.display="none";
+ replay.style.display="none";
+ stage.style.display="flex";
+ count.style.display="block";
+ hint.style.display="block";
+ document.getElementById("dots").style.display="flex";
+ subtitle.textContent="Five little moments, one endless love story.";
+ dots.forEach(d=>d.classList.remove("done"));
+
+ cards=photos.map((p,i)=>{
+  const b=document.createElement("button");
+  b.type="button";
+  b.className="card";
+  b.innerHTML='<img src="'+p.src+'" alt="A special memory"><span>'+p.caption+'</span>';
+  b.style.zIndex=String(10-i);
+  b.style.transform=`translate(${(i-2)*7}px,${i*5}px) rotate(${(i-2)*4}deg) scale(${1-i*.035})`;
+  b.addEventListener("click",()=>reveal(b));
+  stage.appendChild(b);
+  return b;
+ });
+ topCard();
+}
+
+function topCard(){
+ cards.forEach((c,i)=>{
+  c.classList.toggle("top",i===index);
+  c.style.pointerEvents=i===index?"auto":"none";
+ });
+ if(index<5) count.textContent="MEMORY "+(index+1)+" OF 5";
+}
+
+function reveal(card){
+ if(!card.classList.contains("top")||index>=5)return;
+
+ const directions=["fly-left","fly-right","fly-up","fly-down","fly-diag"];
+ card.classList.remove("top");
+ hearts(22);
+ card.classList.add(directions[index]);
+ dots[index].classList.add("done");
+ index++;
+
+ if(index<5){
+  count.textContent="MEMORY "+(index+1)+" OF 5";
+  setTimeout(topCard,180);
+ }else{
+  count.textContent="ALL FIVE MEMORIES REVEALED";
+  hint.textContent="And now, all our moments come together…";
+  setTimeout(showCollage,950);
+ }
+}
+
+function showCollage(){
+ stage.style.display="none";
+ hint.style.display="none";
+ count.style.display="none";
+ document.getElementById("dots").style.display="none";
+ subtitle.textContent="Five moments, forever woven into one beautiful story.";
+
+ collage.innerHTML=photos.map(p=>
+  '<div class="photo"><img src="'+p.src+'" alt="A memory together"></div>'
+ ).join("");
+
+ collage.style.display="block";
+ requestAnimationFrame(()=>collage.classList.add("show"));
+
+ setTimeout(()=>{
+  finalText.style.display="block";
+  replay.style.display="inline-block";
+ },1450);
+}
+
+function goBack(){
+ window.location.href="stage2.html";
+}
+
+setup();
+hearts(34);
+</script>
+</body>
+</html>
