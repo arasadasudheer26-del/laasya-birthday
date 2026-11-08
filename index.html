@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,638 +10,307 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
-html,body{
-  width:100%;
-  height:100%;
-  overflow:hidden;
-}
-
-body{
-  background:#160914;
-  color:white;
-  font-family:'Cormorant Garamond',serif;
-}
+html,body{width:100%;height:100%;overflow:hidden}
+body{background:#160914;color:white;font-family:'Cormorant Garamond',serif}
 
 .scene{
-  position:relative;
-  width:100%;
-  height:100vh;
-  height:100dvh;
-  overflow:hidden;
-  isolation:isolate;
-  background:
-    radial-gradient(ellipse at 50% 48%,#57213e 0%,#301323 48%,#100711 100%);
+ position:relative;width:100%;height:100vh;height:100dvh;
+ overflow:hidden;isolation:isolate;
+ background:radial-gradient(ellipse at 50% 48%,#57213e 0%,#301323 48%,#100711 100%);
 }
-
 .ambient{
-  position:absolute;
-  inset:0;
-  z-index:-3;
-  background:
-    radial-gradient(circle at 20% 30%,#ff9ac51d,transparent 35%),
-    radial-gradient(circle at 80% 70%,#e8a1ff18,transparent 35%);
-  animation:ambient 8s ease-in-out infinite alternate;
+ position:absolute;inset:0;z-index:-3;
+ background:radial-gradient(circle at 20% 30%,#ff9ac51d,transparent 35%),
+ radial-gradient(circle at 80% 70%,#e8a1ff18,transparent 35%);
+ animation:ambient 8s ease-in-out infinite alternate;
 }
-@keyframes ambient{
-  to{transform:scale(1.15);opacity:.7}
-}
-
-/* STARS */
+@keyframes ambient{to{transform:scale(1.15);opacity:.7}}
 
 .stars{position:absolute;inset:0;pointer-events:none;z-index:-1}
 .star{
-  position:absolute;
-  width:3px;height:3px;
-  border-radius:50%;
-  background:#ffe5f1;
-  box-shadow:0 0 10px #ffb5d5;
-  animation:twinkle 2s infinite alternate;
+ position:absolute;width:3px;height:3px;border-radius:50%;
+ background:#ffe5f1;box-shadow:0 0 10px #ffb5d5;
+ animation:twinkle 2s infinite alternate;
 }
-@keyframes twinkle{
-  from{opacity:.2;transform:scale(.6)}
-  to{opacity:1;transform:scale(1.5)}
-}
-
-/* HEADING */
+@keyframes twinkle{from{opacity:.2;transform:scale(.6)}to{opacity:1;transform:scale(1.5)}}
 
 .heading{
-  position:absolute;
-  top:7%;
-  left:0;
-  width:100%;
-  text-align:center;
-  padding:0 12px;
-  z-index:2;
-  animation:fadeDown 1.8s ease both;
+ position:absolute;top:7%;left:0;width:100%;text-align:center;
+ padding:0 12px;z-index:2;animation:fadeDown 1.8s ease both;
 }
-
 .heading h1{
-  font-family:'Great Vibes',cursive;
-  font-size:clamp(38px,9vw,66px);
-  font-weight:400;
-  color:#ffe1ec;
-  text-shadow:0 0 22px #ff8bb8a8;
+ font-family:'Great Vibes',cursive;font-size:clamp(38px,9vw,66px);
+ font-weight:400;color:#ffe1ec;text-shadow:0 0 22px #ff8bb8a8;
 }
-
-.heading p{
-  margin-top:7px;
-  font-size:12px;
-  letter-spacing:4px;
-  text-transform:uppercase;
-  color:#e9b9cc;
-}
-
-@keyframes fadeDown{
-  from{opacity:0;transform:translateY(-20px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-/* HEART BALLOON - EXACT CENTER */
+.heading p{margin-top:7px;font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#e9b9cc}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
 
 .balloon-wrap{
-  position:absolute;
-  left:50%;
-  top:46%;
-  width:190px;
-  height:240px;
-  transform:translate(-50%,-50%);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:3;
-  animation:balloonFloat 3.6s ease-in-out infinite;
+ position:absolute;left:50%;top:46%;width:190px;height:240px;
+ transform:translate(-50%,-50%);display:flex;justify-content:center;
+ align-items:center;z-index:3;animation:balloonFloat 3.6s ease-in-out infinite;
 }
-
-@keyframes balloonFloat{
-  0%,100%{translate:0 0;rotate:-2deg}
-  50%{translate:0 -13px;rotate:2deg}
-}
-
+@keyframes balloonFloat{0%,100%{translate:0 0;rotate:-2deg}50%{translate:0 -13px;rotate:2deg}}
 .heart-balloon{
-  position:relative;
-  width:112px;
-  height:112px;
-  background:radial-gradient(circle at 30% 24%,
-    #ffbed6 0%,#ff78a7 20%,#ec3478 60%,#a4104e 100%);
-  transform:rotate(-45deg);
-  border-radius:15px 0 15px 0;
-  box-shadow:
-    inset 8px 7px 16px #ffffff50,
-    inset -12px -12px 22px #65052e6e,
-    0 0 35px #ff4c93a1,
-    0 0 85px #ff4c9335;
+ position:relative;width:112px;height:112px;
+ background:radial-gradient(circle at 30% 24%,#ffbed6 0%,#ff78a7 20%,#ec3478 60%,#a4104e 100%);
+ transform:rotate(-45deg);border-radius:15px 0 15px 0;
+ box-shadow:inset 8px 7px 16px #ffffff50,inset -12px -12px 22px #65052e6e,0 0 35px #ff4c93a1,0 0 85px #ff4c9335;
 }
-
-.heart-balloon:before,
-.heart-balloon:after{
-  content:"";
-  position:absolute;
-  width:112px;
-  height:112px;
-  border-radius:50%;
-  background:inherit;
-  box-shadow:inherit;
+.heart-balloon:before,.heart-balloon:after{
+ content:"";position:absolute;width:112px;height:112px;border-radius:50%;
+ background:inherit;box-shadow:inherit;
 }
-
 .heart-balloon:before{top:-56px;left:0}
 .heart-balloon:after{left:56px;top:0}
-
 .balloon-shine{
-  position:absolute;
-  z-index:2;
-  width:19px;
-  height:38px;
-  top:-32px;
-  left:22px;
-  background:#ffffff90;
-  border-radius:50%;
-  transform:rotate(45deg);
-  filter:blur(3px);
+ position:absolute;z-index:2;width:19px;height:38px;top:-32px;left:22px;
+ background:#ffffff90;border-radius:50%;transform:rotate(45deg);filter:blur(3px);
 }
-
 .balloon-knot{
-  position:absolute;
-  z-index:3;
-  width:12px;
-  height:12px;
-  left:calc(50% - 6px);
-  bottom:39px;
-  background:#b51d59;
-  transform:rotate(45deg);
+ position:absolute;z-index:3;width:12px;height:12px;left:calc(50% - 6px);
+ bottom:39px;background:#b51d59;transform:rotate(45deg);
 }
-
 .balloon-string{
-  position:absolute;
-  top:175px;
-  left:50%;
-  height:65px;
-  width:1px;
-  background:linear-gradient(#f9b6d2,#ffffff55,transparent);
+ position:absolute;top:175px;left:50%;height:65px;width:1px;
+ background:linear-gradient(#f9b6d2,#ffffff55,transparent);
 }
-
 .balloon-label{
-  position:absolute;
-  z-index:5;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  width:100%;
-  text-align:center;
-  font-family:'Great Vibes',cursive;
-  font-size:25px;
-  color:#fff2f7;
-  text-shadow:0 2px 8px #8e1648;
-  pointer-events:none;
+ position:absolute;z-index:5;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:100%;text-align:center;font-family:'Great Vibes',cursive;
+ font-size:25px;color:#fff2f7;text-shadow:0 2px 8px #8e1648;pointer-events:none;
 }
 
-/* ARCHER - FIXED BOTTOM LEFT CORNER */
-
+/* ARCHER */
 .archer{
-  position:absolute;
-  left:4%;
-  bottom:12%;
-  width:130px;
-  height:170px;
-  z-index:10;
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-  transform-origin:center;
-  animation:archerEnter 1.5s ease both;
-  filter:drop-shadow(0 0 12px #e8b66a66);
+ position:absolute;left:2%;bottom:10%;width:190px;height:245px;
+ z-index:10;cursor:pointer;-webkit-tap-highlight-color:transparent;
+ transform-origin:center bottom;animation:archerEnter 1.5s ease both;
+ filter:drop-shadow(0 0 8px #e8b66a88) drop-shadow(0 0 18px #e8b66a33);
 }
+@keyframes archerEnter{from{opacity:0;transform:translate(-20px,15px)}to{opacity:1;transform:translate(0,0)}}
+.archer svg{width:100%;height:100%;overflow:visible}
+.bow-art{width:100%;height:100%;transform:rotate(-39deg);transform-origin:50% 50%;overflow:visible}
+.bow{fill:none;stroke:url(#gold);stroke-width:8;stroke-linecap:round;filter:drop-shadow(0 0 5px #f5c77a)}
+.bow-highlight{fill:none;stroke:#fff0c2;stroke-width:1.5;opacity:.8}
+.bow-string{fill:none;stroke:#fff0c9;stroke-width:2.2;stroke-linecap:round}
+.string-pull{fill:none;stroke:#fff0c9;stroke-width:2.2;stroke-linecap:round;transform-origin:70px 105px}
+.arrow-held{transform-origin:70px 105px}
+.arrow-shaft{stroke:#f8d79d;stroke-width:4;stroke-linecap:round}
+.arrow-tip{fill:#ffe5aa;stroke:#fff3d1;stroke-width:1}
+.arrow-feather{fill:#d79a54;stroke:#ffe4b0;stroke-width:1}
+.grip{fill:#8d4e32;stroke:#f4c879;stroke-width:2}
 
-@keyframes archerEnter{
-  from{opacity:0;transform:translate(-20px,15px)}
-  to{opacity:1;transform:translate(0,0)}
-}
+.rose-vine{fill:none;stroke:#d7a65d;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 3px #e9b96d)}
+.rose-leaf{fill:#527044;stroke:#d8b16e;stroke-width:1.1}
+.rose-leaf-vein{fill:none;stroke:#e9c68b;stroke-width:.9}
+.rose-petal{fill:url(#roseGold);stroke:#ffe0a1;stroke-width:1}
+.rose-core{fill:#9e3d39;stroke:#ffdc9b;stroke-width:1}
+.rose-detail{fill:none;stroke:#fff0c2;stroke-width:1;opacity:.85}
 
-.archer svg{
-  width:100%;
-  height:100%;
-  overflow:visible;
-}
-
-/* Bow is rotated diagonally towards the balloon */
-
-.bow-art{
-  width:100%;
-  height:100%;
-  transform:rotate(-39deg);
-  transform-origin:50% 50%;
-  overflow:visible;
-}
-
-.bow{
-  fill:none;
-  stroke:url(#gold);
-  stroke-width:8;
-  stroke-linecap:round;
-  filter:drop-shadow(0 0 5px #f5c77a);
-}
-
-.bow-highlight{
-  fill:none;
-  stroke:#fff0c2;
-  stroke-width:1.5;
-  opacity:.8;
-}
-
-.bow-string{
-  fill:none;
-  stroke:#fff0c9;
-  stroke-width:2.2;
-  stroke-linecap:round;
-}
-
-.string-pull{
-  fill:none;
-  stroke:#fff0c9;
-  stroke-width:2.2;
-  stroke-linecap:round;
-  transform-origin:70px 105px;
-}
-
-.arrow-held{
-  transform-origin:70px 105px;
-}
-
-.arrow-shaft{
-  stroke:#f8d79d;
-  stroke-width:4;
-  stroke-linecap:round;
-}
-
-.arrow-tip{
-  fill:#ffe5aa;
-  stroke:#fff3d1;
-  stroke-width:1;
-}
-
-.arrow-feather{
-  fill:#d79a54;
-  stroke:#ffe4b0;
-  stroke-width:1;
-}
-
-.grip{
-  fill:#8d4e32;
-  stroke:#f4c879;
-  stroke-width:2;
-}
-
-/* BOW DRAW ANIMATION */
-
-.archer.pulling .string-pull{
-  animation:drawString .55s ease-in forwards;
-}
-
-.archer.pulling .arrow-held{
-  animation:drawArrow .55s ease-in forwards;
-}
-
-@keyframes drawString{
-  to{transform:translateX(-25px)}
-}
-
-@keyframes drawArrow{
-  to{transform:translateX(-25px)}
-}
-
-.archer.releasing{
-  animation:bowRecoil .35s ease-out;
-}
-
-@keyframes bowRecoil{
-  0%{scale:1}
-  40%{scale:.94}
-  100%{scale:1}
-}
+.archer.pulling .string-pull{animation:drawString .45s ease-in forwards}
+.archer.pulling .arrow-held{animation:drawArrow .45s ease-in forwards}
+@keyframes drawString{to{transform:translateX(-25px)}}
+@keyframes drawArrow{to{transform:translateX(-25px)}}
+.archer.releasing{animation:bowRecoil .35s ease-out}
+.archer.releasing .arrow-held{opacity:0}
+@keyframes bowRecoil{0%{scale:1}40%{scale:.94}100%{scale:1}}
 
 .archer-glow{
-  position:absolute;
-  inset:8px;
-  border:1px solid #ffd99b55;
-  border-radius:50%;
-  pointer-events:none;
-  animation:archerPulse 2.2s infinite;
+ position:absolute;inset:8px;border:1px solid #ffd99b55;border-radius:50%;
+ pointer-events:none;animation:archerPulse 2.2s infinite;
 }
-
-@keyframes archerPulse{
-  0%{transform:scale(.85);opacity:.8}
-  100%{transform:scale(1.3);opacity:0}
-}
-
-/* ARCHER LABEL */
+@keyframes archerPulse{0%{transform:scale(.85);opacity:.8}100%{transform:scale(1.3);opacity:0}}
 
 .tap-label{
-  position:absolute;
-  left:3%;
-  bottom:5%;
-  width:140px;
-  text-align:center;
-  color:#f6d6a6;
-  font-size:10px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  animation:softPulse 2s infinite;
-  z-index:10;
+ position:absolute;left:2%;bottom:3%;width:180px;text-align:center;
+ color:#f6d6a6;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+ animation:softPulse 2s infinite;z-index:10;
 }
-
 @keyframes softPulse{50%{opacity:.5}}
 
-/* ARROW - POSITION CALCULATED BY JAVASCRIPT */
-
 .flying-arrow{
-  position:absolute;
-  width:52px;
-  height:4px;
-  border-radius:5px;
-  background:linear-gradient(90deg,#b87938,#fff0b9);
-  opacity:0;
-  z-index:12;
-  transform-origin:left center;
-  filter:drop-shadow(0 0 8px #ffe2a5);
-  pointer-events:none;
+ position:absolute;width:52px;height:4px;border-radius:5px;
+ background:linear-gradient(90deg,#b87938,#fff0b9);opacity:0;z-index:12;
+ transform-origin:left center;filter:drop-shadow(0 0 8px #ffe2a5);pointer-events:none;
 }
-
 .flying-arrow:before{
-  content:"";
-  position:absolute;
-  right:-14px;
-  top:-6px;
-  border-left:17px solid #ffe4a5;
-  border-top:8px solid transparent;
-  border-bottom:8px solid transparent;
+ content:"";position:absolute;right:-14px;top:-6px;
+ border-left:17px solid #ffe4a5;border-top:8px solid transparent;border-bottom:8px solid transparent;
 }
-
 .flying-arrow:after{
-  content:"";
-  position:absolute;
-  left:-12px;
-  top:-5px;
-  border-right:12px solid #c58c45;
-  border-top:7px solid transparent;
-  border-bottom:7px solid transparent;
+ content:"";position:absolute;left:-12px;top:-5px;
+ border-right:12px solid #c58c45;border-top:7px solid transparent;border-bottom:7px solid transparent;
 }
 
-/* BALLOON BURST */
-
-.scene.hit .balloon-wrap{
-  animation:balloonBurst .48s ease-in forwards;
-}
-
+.scene.hit .balloon-wrap{animation:balloonBurst .48s ease-in forwards}
 @keyframes balloonBurst{
-  0%{transform:translate(-50%,-50%) scale(1)}
-  20%{transform:translate(-50%,-50%) scale(1.13,.86) rotate(7deg)}
-  42%{transform:translate(-50%,-50%) scale(.83,1.16) rotate(-8deg)}
-  65%{transform:translate(-50%,-50%) scale(1.1,.8) rotate(8deg)}
-  100%{transform:translate(-50%,-50%) scale(0) rotate(30deg);opacity:0}
+ 0%{transform:translate(-50%,-50%) scale(1)}
+ 20%{transform:translate(-50%,-50%) scale(1.13,.86) rotate(7deg)}
+ 42%{transform:translate(-50%,-50%) scale(.83,1.16) rotate(-8deg)}
+ 65%{transform:translate(-50%,-50%) scale(1.1,.8) rotate(8deg)}
+ 100%{transform:translate(-50%,-50%) scale(0) rotate(30deg);opacity:0}
 }
-
 .flash{
-  position:absolute;
-  left:50%;
-  top:46%;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  background:white;
-  opacity:0;
-  z-index:8;
-  transform:translate(-50%,-50%);
-  pointer-events:none;
+ position:absolute;left:50%;top:46%;width:20px;height:20px;border-radius:50%;
+ background:white;opacity:0;z-index:8;transform:translate(-50%,-50%);pointer-events:none;
 }
-
-.scene.hit .flash{
-  animation:impactFlash .55s ease-out forwards;
-}
-
+.scene.hit .flash{animation:impactFlash .55s ease-out forwards}
 @keyframes impactFlash{
-  0%{opacity:1;box-shadow:0 0 20px 10px white,0 0 70px 35px #ff9bc9}
-  100%{opacity:0;transform:translate(-50%,-50%) scale(16)}
+ 0%{opacity:1;box-shadow:0 0 20px 10px white,0 0 70px 35px #ff9bc9}
+ 100%{opacity:0;transform:translate(-50%,-50%) scale(16)}
 }
-
 .burst-piece{
-  position:absolute;
-  left:50%;
-  top:46%;
-  width:17px;
-  height:29px;
-  background:linear-gradient(135deg,#ffb0ce,#e52c72,#8b1648);
-  border-radius:70% 15% 70% 15%;
-  opacity:0;
-  z-index:7;
-  pointer-events:none;
+ position:absolute;left:50%;top:46%;width:17px;height:29px;
+ background:linear-gradient(135deg,#ffb0ce,#e52c72,#8b1648);
+ border-radius:70% 15% 70% 15%;opacity:0;z-index:7;pointer-events:none;
 }
-
-.scene.hit .burst-piece{
-  animation:latexBurst 1.05s ease-out forwards;
-}
-
+.scene.hit .burst-piece{animation:latexBurst 1.05s ease-out forwards}
 @keyframes latexBurst{
-  0%{opacity:1;transform:translate(0,0) scale(1) rotate(0)}
-  100%{opacity:0;transform:translate(var(--x),var(--y)) scale(.2) rotate(var(--r))}
+ 0%{opacity:1;transform:translate(0,0) scale(1) rotate(0)}
+ 100%{opacity:0;transform:translate(var(--x),var(--y)) scale(.2) rotate(var(--r))}
 }
-
-/* HEARTS AND SPARKLES */
 
 .particle{
-  position:absolute;
-  left:50%;
-  top:46%;
-  z-index:10;
-  pointer-events:none;
-  animation:particleFly 1.7s ease-out forwards;
+ position:absolute;left:50%;top:46%;z-index:10;pointer-events:none;
+ animation:particleFly 1.7s ease-out forwards;
 }
-
 @keyframes particleFly{
-  0%{opacity:1;transform:translate(-50%,-50%) scale(.4)}
-  100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.5)}
+ 0%{opacity:1;transform:translate(-50%,-50%) scale(.4)}
+ 100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.5)}
 }
-
-/* ROMANTIC TRANSITION */
 
 .transition-heart{
-  position:absolute;
-  left:50%;
-  top:46%;
-  transform:translate(-50%,-50%) scale(0);
-  font-size:60px;
-  color:#ffb4d1;
-  opacity:0;
-  z-index:20;
-  text-shadow:0 0 25px #ff4b91,0 0 70px #ff9fc8;
-  pointer-events:none;
+ position:absolute;left:50%;top:46%;transform:translate(-50%,-50%) scale(0);
+ font-size:60px;color:#ffb4d1;opacity:0;z-index:20;
+ text-shadow:0 0 25px #ff4b91,0 0 70px #ff9fc8;pointer-events:none;
 }
-
-.scene.transition .transition-heart{
-  animation:heartGrow 2.1s ease-in-out forwards;
-}
-
+.scene.transition .transition-heart{animation:heartGrow 1.45s ease-in forwards}
 @keyframes heartGrow{
-  0%{opacity:0;transform:translate(-50%,-50%) scale(0)}
-  35%{opacity:1;transform:translate(-50%,-50%) scale(1.5)}
-  70%{opacity:1;transform:translate(-50%,-50%) scale(2.5)}
-  100%{opacity:1;transform:translate(-50%,-50%) scale(35)}
+ 0%{opacity:0;transform:translate(-50%,-50%) scale(0)}
+ 35%{opacity:1;transform:translate(-50%,-50%) scale(1.5)}
+ 70%{opacity:1;transform:translate(-50%,-50%) scale(2.5)}
+ 100%{opacity:1;transform:translate(-50%,-50%) scale(35)}
 }
-
 .screen-wash{
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle,#ffe1ed,#f48bb6 35%,#31101f);
-  opacity:0;
-  z-index:15;
-  pointer-events:none;
+ position:absolute;inset:0;background:radial-gradient(circle,#ffe1ed,#f48bb6 35%,#31101f);
+ opacity:0;z-index:15;pointer-events:none;
 }
-
-.scene.transition .screen-wash{
-  animation:wash .9s ease-in 1.2s forwards;
-}
-
+.scene.transition .screen-wash{animation:wash .65s ease-in .8s forwards}
 @keyframes wash{to{opacity:1}}
 
 .instruction{
-  position:absolute;
-  bottom:3%;
-  left:0;
-  width:100%;
-  text-align:center;
-  padding:0 12px;
-  color:#f7dce7;
-  font-size:16px;
-  letter-spacing:1px;
-  z-index:4;
+ position:absolute;bottom:2%;left:0;width:100%;text-align:center;padding:0 12px;
+ color:#f7dce7;font-size:16px;letter-spacing:1px;z-index:4;
 }
-
-.scene.done .heading,
-.scene.done .instruction,
-.scene.done .archer,
-.scene.done .tap-label{
-  opacity:0;
-  transition:opacity .5s;
+.scene.done .heading,.scene.done .instruction,.scene.done .archer,.scene.done .tap-label{
+ opacity:0;transition:opacity .35s;
 }
-
-/* MOBILE FIRST */
 
 @media(max-width:600px){
-  .heading{top:8%}
-
-  .balloon-wrap{
-    left:50%;
-    top:46%;
-  }
-
-  .archer{
-    left:4%;
-    bottom:12%;
-    top:auto;
-    width:125px;
-    height:165px;
-  }
-
-  .tap-label{
-    left:2%;
-    bottom:5%;
-    width:135px;
-    font-size:9px;
-  }
-
-  .instruction{
-    bottom:2%;
-    font-size:14px;
-  }
+ .heading{top:8%}
+ .balloon-wrap{left:50%;top:46%;transform:translate(-50%,-50%) scale(.94)}
+ .archer{left:1%;bottom:9%;width:180px;height:235px}
+ .tap-label{left:0;bottom:3%;width:175px;font-size:9px}
+ .instruction{bottom:2%;font-size:14px}
 }
-
 @media(max-height:650px){
-  .heading{top:3%}
-  .balloon-wrap{top:43%;transform:translate(-50%,-50%) scale(.78)}
-  .archer{width:105px;height:140px;bottom:11%}
-  .tap-label{bottom:4%}
+ .heading{top:3%}
+ .balloon-wrap{top:43%;transform:translate(-50%,-50%) scale(.78)}
+ .archer{width:135px;height:175px;bottom:9%}
+ .tap-label{bottom:3%}
 }
-
-/* ACCESSIBILITY */
 @media(prefers-reduced-motion:reduce){
-  .star,.ambient,.balloon-wrap,.archer,.archer-glow,.tap-label{
-    animation-duration:8s;
-  }
+ .star,.ambient,.balloon-wrap,.archer,.archer-glow,.tap-label{animation-duration:8s}
 }
 </style>
 </head>
 
 <body>
 <div class="scene" id="scene">
+ <div class="ambient"></div>
+ <div class="stars" id="stars"></div>
 
-  <div class="ambient"></div>
-  <div class="stars" id="stars"></div>
+ <header class="heading">
+  <h1>A Heartshot of Love</h1>
+  <p>A little magic, made only for you</p>
+ </header>
 
-  <header class="heading">
-    <h1>A Heartshot of Love</h1>
-    <p>A little magic, made only for you</p>
-  </header>
+ <div class="balloon-wrap" id="balloon">
+  <div class="heart-balloon"><div class="balloon-shine"></div></div>
+  <div class="balloon-knot"></div>
+  <div class="balloon-string"></div>
+  <div class="balloon-label">My Love</div>
+ </div>
 
-  <!-- HEART BALLOON IN THE MIDDLE -->
-  <div class="balloon-wrap" id="balloon">
-    <div class="heart-balloon">
-      <div class="balloon-shine"></div>
-    </div>
-    <div class="balloon-knot"></div>
-    <div class="balloon-string"></div>
-    <div class="balloon-label">My Love</div>
-  </div>
+ <div class="archer" id="archer" role="button" tabindex="0" aria-label="Pull the bow and shoot">
+  <div class="archer-glow"></div>
+  <svg viewBox="0 0 160 220" xmlns="http://www.w3.org/2000/svg">
+   <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+     <stop offset="0" stop-color="#fff0bd"/>
+     <stop offset=".45" stop-color="#d7a04f"/>
+     <stop offset="1" stop-color="#8d5727"/>
+    </linearGradient>
+    <linearGradient id="roseGold" x1="0" y1="0" x2="1" y2="1">
+     <stop offset="0" stop-color="#fff0c2"/>
+     <stop offset=".45" stop-color="#d99a55"/>
+     <stop offset="1" stop-color="#9e493c"/>
+    </linearGradient>
+   </defs>
+   <g class="bow-art">
+    <path class="bow" d="M72 15 Q5 105 72 205"/>
+    <path class="bow-highlight" d="M72 15 Q17 105 72 205"/>
+    <path class="rose-vine" d="M66 33 Q36 55 48 83 Q57 100 48 121 Q38 145 58 169 Q67 181 68 193"/>
+    <path class="rose-vine" d="M48 83 Q26 75 22 58 M48 121 Q22 130 23 151 M58 169 Q83 160 91 174"/>
+    <path class="rose-leaf" d="M39 67 Q20 49 20 65 Q25 80 39 67Z"/>
+    <path class="rose-leaf-vein" d="M23 64 Q31 66 38 68"/>
+    <path class="rose-leaf" d="M49 91 Q68 75 65 92 Q61 105 49 91Z"/>
+    <path class="rose-leaf-vein" d="M51 91 Q58 91 64 92"/>
+    <path class="rose-leaf" d="M36 135 Q17 126 20 142 Q27 153 36 135Z"/>
+    <path class="rose-leaf-vein" d="M22 137 Q29 137 35 136"/>
+    <path class="rose-leaf" d="M62 163 Q82 149 79 166 Q72 178 62 163Z"/>
+    <path class="rose-leaf-vein" d="M64 164 Q72 165 78 165"/>
 
-  <!-- ARCHER AT BOTTOM LEFT -->
-  <div class="archer" id="archer" role="button" tabindex="0" aria-label="Pull the bow and shoot">
+    <g transform="translate(35 48)">
+     <path class="rose-petal" d="M0 -13 C-17 -20 -21 -2 -9 5 C-23 16 -5 25 4 12 C19 22 25 3 10 -3 C15 -19 1 -24 0 -13Z"/>
+     <path class="rose-core" d="M-7 -5 Q0 -15 8 -5 Q14 3 4 9 Q-7 13 -9 3Z"/>
+     <path class="rose-detail" d="M-5 -3 Q0 1 5 -4 M-3 5 Q3 8 7 3"/>
+    </g>
+    <g transform="translate(48 119) scale(.65)">
+     <path class="rose-petal" d="M0 -13 C-17 -20 -21 -2 -9 5 C-23 16 -5 25 4 12 C19 22 25 3 10 -3 C15 -19 1 -24 0 -13Z"/>
+     <path class="rose-core" d="M-7 -5 Q0 -15 8 -5 Q14 3 4 9 Q-7 13 -9 3Z"/>
+     <path class="rose-detail" d="M-5 -3 Q0 1 5 -4"/>
+    </g>
+    <g transform="translate(64 175) scale(.48)">
+     <path class="rose-petal" d="M0 -13 C-17 -20 -21 -2 -9 5 C-23 16 -5 25 4 12 C19 22 25 3 10 -3 C15 -19 1 -24 0 -13Z"/>
+     <path class="rose-core" d="M-7 -5 Q0 -15 8 -5 Q14 3 4 9 Q-7 13 -9 3Z"/>
+    </g>
+    <path class="grip" d="M65 91 Q79 105 65 126 L58 119 Q68 108 58 101 Z"/>
+    <path d="M62 101 L70 110 L62 119" fill="none" stroke="#ffe0a1" stroke-width="2"/>
+    <path class="bow-string" d="M72 15 L70 105 L72 205"/>
+    <path class="string-pull" d="M72 15 L70 105 L72 205"/>
+    <g class="arrow-held">
+     <path class="arrow-shaft" d="M70 105 L153 105"/>
+     <path class="arrow-tip" d="M153 105 L135 95 L140 105 L135 115 Z"/>
+     <path class="arrow-feather" d="M72 105 L55 94 L61 105 L55 116 Z"/>
+     <path class="arrow-feather" d="M75 105 L63 88 L67 105 L63 122 Z"/>
+    </g>
+    <circle cx="72" cy="15" r="5" fill="#ffe6ae"/>
+    <circle cx="72" cy="205" r="5" fill="#ffe6ae"/>
+    <circle cx="25" cy="91" r="2" fill="#ffe3a6"/>
+    <circle cx="76" cy="151" r="2.5" fill="#ffe3a6"/>
+    <circle cx="31" cy="158" r="2" fill="#ffe3a6"/>
+   </g>
+  </svg>
+ </div>
 
-    <div class="archer-glow"></div>
-
-    <svg viewBox="0 0 160 220" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#fff0bd"/>
-          <stop offset=".45" stop-color="#d7a04f"/>
-          <stop offset="1" stop-color="#8d5727"/>
-        </linearGradient>
-      </defs>
-
-      <g class="bow-art">
-        <!-- Golden curved bow -->
-        <path class="bow" d="M72 15 Q5 105 72 205"/>
-        <path class="bow-highlight" d="M72 15 Q17 105 72 205"/>
-
-        <!-- Grip -->
-        <path class="grip" d="M65 91 Q79 105 65 126 L58 119 Q68 108 58 101 Z"/>
-        <path d="M62 101 L70 110 L62 119" fill="none" stroke="#ffe0a1" stroke-width="2"/>
-
-        <!-- Bowstring -->
-        <path class="bow-string" d="M72 15 L70 105 L72 205"/>
-        <path class="string-pull" d="M72 15 L70 105 L72 205"/>
-
-        <!-- Arrow -->
-        <g class="arrow-held">
-          <path class="arrow-shaft" d="M70 105 L153 105"/>
-          <path class="arrow-tip" d="M153 105 L135 95 L140 105 L135 115 Z"/>
-          <path class="arrow-feather" d="M72 105 L55 94 L61 105 L55 116 Z"/>
-          <path class="arrow-feather" d="M75 105 L63 88 L67 105 L63 122 Z"/>
-        </g>
-
-        <circle cx="72" cy="15" r="5" fill="#ffe6ae"/>
-        <circle cx="72" cy="205" r="5" fill="#ffe6ae"/>
-      </g>
-    </svg>
-  </div>
-
-  <div class="tap-label">✦ Touch the archer ✦</div>
-
-  <div class="instruction" id="instruction">
-    One arrow... One heart... Endless love.
-  </div>
-
-  <div class="flying-arrow" id="flyingArrow"></div>
-  <div class="flash"></div>
-  <div class="transition-heart">♥</div>
-  <div class="screen-wash"></div>
-
+ <div class="tap-label">✦ Touch the archer ✦</div>
+ <div class="instruction" id="instruction">One arrow... One heart... Endless love.</div>
+ <div class="flying-arrow" id="flyingArrow"></div>
+ <div class="flash"></div>
+ <div class="transition-heart">♥</div>
+ <div class="screen-wash"></div>
 </div>
 
 <script>
@@ -651,180 +319,131 @@ const archer=document.getElementById("archer");
 const balloon=document.getElementById("balloon");
 const flyingArrow=document.getElementById("flyingArrow");
 const instruction=document.getElementById("instruction");
-
 let started=false;
 
-/* BACKGROUND STARS */
 const stars=document.getElementById("stars");
-
 for(let i=0;i<75;i++){
-  const star=document.createElement("span");
-  star.className="star";
-  star.style.left=Math.random()*100+"%";
-  star.style.top=Math.random()*100+"%";
-  star.style.animationDelay=Math.random()*3+"s";
-  star.style.animationDuration=(1.5+Math.random()*3)+"s";
-  stars.appendChild(star);
+ const star=document.createElement("span");
+ star.className="star";
+ star.style.left=Math.random()*100+"%";
+ star.style.top=Math.random()*100+"%";
+ star.style.animationDelay=Math.random()*3+"s";
+ star.style.animationDuration=(1.5+Math.random()*3)+"s";
+ stars.appendChild(star);
 }
 
-/* LATEX FRAGMENTS */
 function createBurstPieces(){
-  for(let i=0;i<22;i++){
-    const piece=document.createElement("div");
-    piece.className="burst-piece";
-
-    const angle=(Math.PI*2*i)/22;
-    const distance=75+Math.random()*170;
-
-    piece.style.setProperty("--x",Math.cos(angle)*distance+"px");
-    piece.style.setProperty("--y",Math.sin(angle)*distance+"px");
-    piece.style.setProperty("--r",(Math.random()*760-380)+"deg");
-    piece.style.animationDelay=(Math.random()*.1)+"s";
-
-    scene.appendChild(piece);
-  }
+ for(let i=0;i<22;i++){
+  const piece=document.createElement("div");
+  piece.className="burst-piece";
+  const angle=(Math.PI*2*i)/22;
+  const distance=75+Math.random()*170;
+  piece.style.setProperty("--x",Math.cos(angle)*distance+"px");
+  piece.style.setProperty("--y",Math.sin(angle)*distance+"px");
+  piece.style.setProperty("--r",(Math.random()*760-380)+"deg");
+  piece.style.animationDelay=(Math.random()*.1)+"s";
+  scene.appendChild(piece);
+ }
 }
 
-/* FLOATING HEARTS AND GOLD PARTICLES */
 function createHearts(){
-  const symbols=["♥","♡","✦","✧","❤"];
-
-  for(let i=0;i<48;i++){
-    const p=document.createElement("span");
-    p.className="particle";
-    p.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-
-    p.style.color=Math.random()>.5?"#ffd1e2":"#ffe5ae";
-    p.style.fontSize=(12+Math.random()*24)+"px";
-    p.style.setProperty("--x",(Math.random()*500-250)+"px");
-    p.style.setProperty("--y",(Math.random()*500-250)+"px");
-    p.style.animationDelay=(Math.random()*.25)+"s";
-
-    scene.appendChild(p);
-  }
+ const symbols=["♥","♡","✦","✧","❤"];
+ for(let i=0;i<48;i++){
+  const p=document.createElement("span");
+  p.className="particle";
+  p.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+  p.style.color=Math.random()>.5?"#ffd1e2":"#ffe5ae";
+  p.style.fontSize=(12+Math.random()*24)+"px";
+  p.style.setProperty("--x",(Math.random()*500-250)+"px");
+  p.style.setProperty("--y",(Math.random()*500-250)+"px");
+  p.style.animationDelay=(Math.random()*.25)+"s";
+  scene.appendChild(p);
+ }
 }
 
-/* SMALL IMPACT SOUND */
 function playBurstSound(){
-  try{
-    const AC=window.AudioContext||window.webkitAudioContext;
-    if(!AC)return;
-
-    const ctx=new AC();
-    const osc=ctx.createOscillator();
-    const gain=ctx.createGain();
-
-    osc.type="sine";
-    osc.frequency.setValueAtTime(620,ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(150,ctx.currentTime+.22);
-
-    gain.gain.setValueAtTime(.13,ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.26);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime+.27);
-  }catch(e){}
+ try{
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return;
+  const ctx=new AC();
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  osc.type="sine";
+  osc.frequency.setValueAtTime(620,ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(150,ctx.currentTime+.22);
+  gain.gain.setValueAtTime(.13,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.26);
+  osc.connect(gain);gain.connect(ctx.destination);
+  osc.start();osc.stop(ctx.currentTime+.27);
+  osc.onended=()=>ctx.close();
+ }catch(e){}
 }
 
-/* CALCULATE REAL START AND TARGET POSITIONS */
 function launchArrow(){
-  const sceneRect=scene.getBoundingClientRect();
-  const archerRect=archer.getBoundingClientRect();
-  const balloonRect=balloon.getBoundingClientRect();
+ const sceneRect=scene.getBoundingClientRect();
+ const archerRect=archer.getBoundingClientRect();
+ const balloonRect=balloon.getBoundingClientRect();
 
-  // Arrow begins near the bow, not beside the balloon.
-  const startX=archerRect.left-sceneRect.left+archerRect.width*.78;
-  const startY=archerRect.top-sceneRect.top+archerRect.height*.35;
+ // Start closer to the arrow tip on the bow.
+ const startX=archerRect.left-sceneRect.left+archerRect.width*.91;
+ const startY=archerRect.top-sceneRect.top+archerRect.height*.36;
+ const targetX=balloonRect.left-sceneRect.left+balloonRect.width/2;
+ const targetY=balloonRect.top-sceneRect.top+balloonRect.height/2;
 
-  // Arrow target is the actual visual centre of the balloon.
-  const targetX=balloonRect.left-sceneRect.left+balloonRect.width/2;
-  const targetY=balloonRect.top-sceneRect.top+balloonRect.height/2;
+ const dx=targetX-startX;
+ const dy=targetY-startY;
+ const angle=Math.atan2(dy,dx)*180/Math.PI;
+ const distance=Math.hypot(dx,dy);
 
-  const dx=targetX-startX;
-  const dy=targetY-startY;
-  const angle=Math.atan2(dy,dx)*180/Math.PI;
+ flyingArrow.style.left=startX+"px";
+ flyingArrow.style.top=startY+"px";
+ flyingArrow.style.width=Math.max(52,distance)+"px";
+ flyingArrow.style.transform=`rotate(${angle}deg)`;
+ flyingArrow.style.opacity="1";
 
-  flyingArrow.style.left=startX+"px";
-  flyingArrow.style.top=startY+"px";
-  flyingArrow.style.transform=`rotate(${angle}deg)`;
-  flyingArrow.style.opacity="1";
-
-  flyingArrow.animate([
-    {
-      left:startX+"px",
-      top:startY+"px",
-      transform:`rotate(${angle}deg)`,
-      opacity:1
-    },
-    {
-      left:targetX+"px",
-      top:targetY+"px",
-      transform:`rotate(${angle}deg)`,
-      opacity:1
-    }
-  ],{
-    duration:850,
-    easing:"cubic-bezier(.18,.72,.32,1)",
-    fill:"forwards"
-  });
+ flyingArrow.animate([
+  {left:startX+"px",top:startY+"px",transform:`rotate(${angle}deg)`,opacity:1},
+  {left:targetX+"px",top:targetY+"px",transform:`rotate(${angle}deg)`,opacity:1}
+ ],{
+  duration:650,easing:"cubic-bezier(.18,.72,.32,1)",fill:"forwards"
+ });
 }
 
-/* SHOOTING SEQUENCE */
 function shootArrow(){
-  if(started)return;
-  started=true;
+ if(started)return;
+ started=true;
+ archer.style.pointerEvents="none";
+ instruction.textContent="Drawing the bow... aiming for your heart. ❤️";
+ archer.classList.add("pulling");
 
-  archer.style.pointerEvents="none";
-  instruction.textContent="Drawing the bow... aiming for your heart. ❤️";
+ setTimeout(()=>{
+  archer.classList.remove("pulling");
+  archer.classList.add("releasing");
+  instruction.textContent="And the arrow flies... ❤️";
+  launchArrow();
+ },500);
 
-  // Pull bowstring backwards.
-  archer.classList.add("pulling");
+ setTimeout(()=>{
+  scene.classList.add("hit");
+  instruction.textContent="Straight to the heart... ❤️";
+  createBurstPieces();
+  createHearts();
+  playBurstSound();
+ },1200);
 
-  setTimeout(()=>{
-    archer.classList.remove("pulling");
-    archer.classList.add("releasing");
+ setTimeout(()=>scene.classList.add("transition"),1900);
+ setTimeout(()=>scene.classList.add("done"),2700);
 
-    instruction.textContent="And the arrow flies... ❤️";
-
-    // Arrow travels from bottom-left towards balloon centre.
-    launchArrow();
-  },650);
-
-  // Impact occurs after arrow flight.
-  setTimeout(()=>{
-    scene.classList.add("hit");
-
-    instruction.textContent="Straight to the heart... ❤️";
-
-    createBurstPieces();
-    createHearts();
-    playBurstSound();
-  },1500);
-
-  // Romantic heart transition.
-  setTimeout(()=>{
-    scene.classList.add("transition");
-  },2500);
-
-  setTimeout(()=>{
-    scene.classList.add("done");
-  },3500);
-
-  // Stage 2
-  setTimeout(()=>{
-    window.location.href="stage2.html";
-  },4500);
+ // Faster move to Stage 2, after the heart transition.
+ setTimeout(()=>{window.location.href="stage2.html"},3100);
 }
 
 archer.addEventListener("click",shootArrow);
-
 archer.addEventListener("keydown",e=>{
-  if(e.key==="Enter"||e.key===" "){
-    e.preventDefault();
-    shootArrow();
-  }
+ if(e.key==="Enter"||e.key===" "){
+  e.preventDefault();
+  shootArrow();
+ }
 });
 </script>
 </body>
