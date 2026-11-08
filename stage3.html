@@ -77,8 +77,12 @@ button{font-family:inherit}
 
 /* PREMIUM ROYAL BOOK */
 .book-stage{
- width:min(94vw,410px);height:min(67svh,520px);
- min-height:390px;perspective:2200px;position:relative;z-index:3
+ width:min(96vw,430px);
+ height:min(76svh,680px);
+ min-height:440px;
+ perspective:2200px;
+ position:relative;
+ z-index:3
 }
 .book{
  width:100%;height:100%;position:relative;
@@ -155,8 +159,6 @@ button{font-family:inherit}
  border:1px solid #d8b77777;
  pointer-events:none
 }
-
-/* Ornamental corner details */
 .cover-corner{
  position:absolute;color:#e8c887;font-size:25px;
  line-height:1;text-shadow:0 0 9px #d9b66c55
@@ -165,7 +167,6 @@ button{font-family:inherit}
 .cover-corner.tr{top:25px;right:25px}
 .cover-corner.bl{bottom:25px;left:25px}
 .cover-corner.br{bottom:25px;right:25px}
-
 .cover-content{
  text-align:center;position:relative;z-index:2;
  padding:25px;width:100%
@@ -218,42 +219,45 @@ button{font-family:inherit}
 
 /* PAGE DESIGN */
 .single-page{
- position:absolute;z-index:4;left:35px;right:13px;top:13px;bottom:13px;
+ position:absolute;z-index:4;
+ left:35px;right:13px;top:13px;bottom:13px;
  background:
  radial-gradient(ellipse at 50% 40%,#fff9eb,transparent 75%),
  repeating-linear-gradient(0deg,#f1e3c8,#f8edd8 2px,#edddbd 4px);
  color:#4b2631;border-radius:2px 9px 9px 2px;
  display:flex;flex-direction:column;align-items:center;
- padding:13px 12px 10px;overflow:hidden;
- touch-action:pan-y;user-select:none;-webkit-user-select:none
+ padding:9px 8px 7px;overflow:hidden;
+ touch-action:pan-y;user-select:none;-webkit-user-select:none;
+ gap:0
 }
 .single-page:after{
  content:"";position:absolute;inset:9px;
  pointer-events:none;border:1px solid #b48c54
 }
 .page-top{
- font-size:10px;letter-spacing:2.5px;text-transform:uppercase;
- color:#997044;margin-bottom:5px;z-index:2;flex-shrink:0
+ font-size:9px;letter-spacing:2px;text-transform:uppercase;
+ color:#997044;margin-bottom:3px;z-index:2;flex-shrink:0
 }
 .page-ornament{
- color:#b28b55;font-size:18px;letter-spacing:8px;
- margin-bottom:7px;z-index:2;flex-shrink:0
+ color:#b28b55;font-size:15px;letter-spacing:8px;
+ margin-bottom:4px;z-index:2;flex-shrink:0
 }
 
-/* BIGGER PRINTED PHOTO AREA */
+/* LARGE PRINTED PHOTO AREA */
 .photo-window{
- width:100%;
- flex:1;
+ flex:1 1 0;
  min-height:0;
+ width:100%;
  position:relative;
  z-index:2;
+ margin:0;
+ padding:3px;
  background:
  linear-gradient(135deg,#e8d8b9,#f4e8ce 45%,#dfcba7);
  border:1px solid #b58d55;
- padding:5px;
  box-shadow:
- 0 3px 9px #6b493329,
- inset 0 0 0 2px #fff4dc;
+ 0 2px 5px #6b493322,
+ inset 0 0 0 1px #fff4dc;
  overflow:hidden;
  display:flex;
  align-items:center;
@@ -270,42 +274,45 @@ button{font-family:inherit}
 .photo-window img{
  width:100%;
  height:100%;
+ min-height:0;
  display:block;
  object-fit:contain;
  object-position:center;
- background:#e9ddc5;
- padding:2px;
- filter:sepia(.12) saturate(.9) contrast(.97);
+ background:#f1e3c8;
+ padding:0;
+ border:0;
+ filter:sepia(.16) saturate(.88) contrast(.96);
  transition:opacity .25s
 }
 
-/* ONLY ONE CAPTION */
+/* ONLY ONE SMALL CAPTION */
 .photo-caption{
  font-family:'Great Vibes',cursive;
- font-size:clamp(22px,5.8vw,29px);
+ font-size:clamp(19px,5vw,25px);
  text-align:center;
- line-height:1.12;
+ line-height:1.05;
  color:#63283d;
- margin:7px 2px 4px;
- min-height:45px;
- max-height:58px;
+ margin:5px 0 2px;
+ min-height:0;
+ max-height:none;
+ height:auto;
  width:100%;
  padding:2px 5px;
  display:flex;
  align-items:center;
  justify-content:center;
  z-index:2;
- flex-shrink:0;
- overflow:hidden;
+ flex:0 0 auto;
+ overflow:visible;
  text-shadow:0 1px 0 #fff4e5
 }
 .page-number{
- margin-top:auto;
- font-size:10px;
- letter-spacing:3px;
+ margin-top:2px;
+ font-size:8px;
+ letter-spacing:2px;
  color:#8a633e;
  z-index:2;
- flex-shrink:0
+ flex:0 0 auto
 }
 
 .flip-sheet{
@@ -322,7 +329,7 @@ button{font-family:inherit}
 @keyframes flipForward{to{transform:rotateY(-180deg)}}
 @keyframes flipBack{to{transform:rotateY(180deg)}}
 
-/* SWIPE GUIDE - ONLY ONE INSTRUCTION */
+/* SWIPE GUIDE */
 .swipe-guide{
  display:none;position:relative;z-index:12;width:min(92vw,390px);
  margin:13px auto 0;padding:10px 14px;text-align:center;
@@ -394,7 +401,7 @@ button{font-family:inherit}
 .tree-branch{stroke:#68402e;stroke-width:10}
 .tree-root{stroke:#68402e;stroke-width:8}
 
-/* FASTER TREE GROWTH */
+/* FAST TREE GROWTH */
 #treeScene.growing .tree-trunk{animation:drawTree 2.5s cubic-bezier(.3,.7,.2,1) forwards}
 #treeScene.growing .tree-root{animation:drawRoot 1.3s ease-out 1.2s forwards}
 #treeScene.growing .tree-branch{animation:drawBranch 1.8s ease-out 1.7s forwards}
@@ -414,7 +421,7 @@ button{font-family:inherit}
  to{opacity:0;transform:translateX(-50%) scale(.5)}
 }
 
-/* 1000 BIG HEARTS */
+/* 1000 HEARTS */
 #heartCanopy{
  position:absolute;inset:0;width:100%;height:100%;
  z-index:2;pointer-events:none;opacity:0;
@@ -451,12 +458,20 @@ button{font-family:inherit}
 .tree-actions{text-align:center;position:relative;z-index:6;margin:0 auto 25px}
 .tree-actions button{margin:5px}
 
+/* RESPONSIVE BOOK */
 @media(max-width:390px){
- .book-stage{height:min(65svh,470px);min-height:375px}
- .single-page{padding:10px 9px 8px}
- .page-top{font-size:9px;margin-bottom:4px}
- .page-ornament{margin-bottom:5px}
- .photo-caption{font-size:23px;min-height:42px;max-height:52px;margin:5px 2px 3px}
+ .book-stage{
+  width:96vw;
+  height:min(76svh,650px);
+  min-height:430px
+ }
+ .single-page{
+  left:35px;right:13px;
+  padding:8px 7px 6px
+ }
+ .page-top{font-size:8px;margin-bottom:2px}
+ .page-ornament{font-size:14px;margin-bottom:3px}
+ .photo-caption{font-size:20px;margin:4px 0 2px}
  .tree-area{height:570px;min-height:490px}
  .cover-corner.tl{top:22px;left:21px}
  .cover-corner.tr{top:22px;right:21px}
@@ -464,10 +479,10 @@ button{font-family:inherit}
  .cover-corner.br{bottom:22px;right:21px}
 }
 @media(min-width:600px){
- .book-stage{width:420px;height:530px}
- .single-page{left:39px;right:15px;padding:17px}
+ .book-stage{width:440px;height:650px}
+ .single-page{left:39px;right:15px;padding:12px}
  .flip-sheet{left:39px;right:15px}
- .photo-caption{font-size:29px;min-height:48px}
+ .photo-caption{font-size:26px}
 }
 </style>
 </head>
@@ -667,6 +682,7 @@ function showMemory(index){
 
 image.onerror=()=>{
  image.alt="Memory image could not be loaded";
+ image.style.opacity="1";
  caption.textContent="A memory worth keeping forever. ❤️";
 };
 
@@ -865,7 +881,6 @@ function createHeartLeaves(){
   {x:.61,y:.40,rx:.22,ry:.17}
  ];
 
- /* Exactly 1000 larger hearts */
  for(let i=0;i<1000;i++){
   const c=clusters[Math.floor(Math.random()*clusters.length)];
 
@@ -887,7 +902,7 @@ function createHeartLeaves(){
  drawHeartLeaves();
 }
 
-/* DRAW HEARTS ONCE - REDUCES PHONE LAG */
+/* DRAW ONCE TO REDUCE PHONE LAG */
 function drawHeartLeaves(){
  const canvas=document.getElementById("heartCanopy");
  const ctx=canvas.getContext("2d");
@@ -931,6 +946,7 @@ function createFruits(){
   const img=document.createElement("img");
   img.src=item.src;
   img.alt="Our memory "+(i+1);
+  img.loading="eager";
   img.decoding="async";
   img.onerror=()=>{img.style.display="none"};
 
@@ -942,7 +958,6 @@ function createFruits(){
   fruit.appendChild(label);
   layer.appendChild(fruit);
 
-  /* Photos appear one after another quickly */
   setTimeout(()=>fruit.classList.add("visible"),i*100);
  });
 }
@@ -982,13 +997,11 @@ function startTree(){
 
  tree.classList.add("growing");
 
- /* Hearts appear sooner */
  treeTimers.push(setTimeout(()=>{
   createHeartLeaves();
   tree.classList.add("leaves-ready");
  },2500));
 
- /* Photos follow the hearts */
  treeTimers.push(setTimeout(()=>{
   createFruits();
  },3500));
