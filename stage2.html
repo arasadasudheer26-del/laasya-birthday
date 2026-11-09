@@ -445,24 +445,115 @@ function soundCakeSplit(){
  sparkleChime();
 }
 
+/* SOFT ROMANTIC CELEBRATION MUSIC */
 function soundFinale(){
  if(!soundReady)return;
- const chords=[
-  [130.81,164.81,196,261.63],
-  [146.83,185,220,293.66],
-  [164.81,207.65,246.94,329.63],
-  [196,246.94,293.66,392]
- ];
- chords.forEach((chord,i)=>{
-  chord.forEach((f,j)=>{
-   tone(f,i*.42,2.5,.12,"sawtooth");
-   tone(f*2,i*.42+.04,2.1,.045,"sine");
+
+ const ctx=audioContext;
+ const start=ctx.currentTime+.15;
+
+ /* Gentle note with a soft piano-like envelope */
+ function romanticNote(freq,when,duration,volume){
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  const filter=ctx.createBiquadFilter();
+
+  osc.type="sine";
+  osc.frequency.setValueAtTime(freq,when);
+
+  filter.type="lowpass";
+  filter.frequency.setValueAtTime(1800,when);
+  filter.Q.value=.5;
+
+  gain.gain.setValueAtTime(.0001,when);
+  gain.gain.linearRampToValueAtTime(volume,when+.18);
+  gain.gain.setValueAtTime(volume*.72,when+Math.min(.35,duration*.35));
+  gain.gain.exponentialRampToValueAtTime(.0001,when+duration);
+
+  osc.connect(filter);
+  filter.connect(gain);
+  gain.connect(masterGain);
+
+  osc.start(when);
+  osc.stop(when+duration+.05);
+ }
+
+ /* Warm sustained string-like chords */
+ function romanticPad(notes,when,duration,volume){
+  notes.forEach((freq,index)=>{
+   const osc=ctx.createOscillator();
+   const gain=ctx.createGain();
+   const filter=ctx.createBiquadFilter();
+
+   osc.type="triangle";
+   osc.frequency.setValueAtTime(freq,when);
+
+   filter.type="lowpass";
+   filter.frequency.value=850;
+   filter.Q.value=.4;
+
+   const level=volume/(index===0?1:1.5);
+
+   gain.gain.setValueAtTime(.0001,when);
+   gain.gain.linearRampToValueAtTime(level,when+1.1);
+   gain.gain.setValueAtTime(level*.8,when+duration*.65);
+   gain.gain.linearRampToValueAtTime(.0001,when+duration);
+
+   osc.connect(filter);
+   filter.connect(gain);
+   gain.connect(masterGain);
+
+   osc.start(when);
+   osc.stop(when+duration+.08);
   });
+ }
+
+ /* Soft romantic chord progression */
+ const chords=[
+  {notes:[261.63,329.63,392],bass:130.81},
+  {notes:[220,261.63,329.63],bass:110},
+  {notes:[174.61,220,261.63],bass:87.31},
+  {notes:[196,246.94,293.66],bass:98},
+  {notes:[261.63,329.63,392],bass:130.81}
+ ];
+
+ chords.forEach((chord,index)=>{
+  const when=start+index*2.8;
+
+  romanticPad(chord.notes,when,3.1,.025);
+  romanticNote(chord.bass,when,2.8,.035);
  });
- noiseSweep(2.1,.32);
- bassImpact(1.35);
- setTimeout(()=>bassImpact(1),650);
- setTimeout(()=>sparkleChime(),850);
+
+ /* A gentle piano-inspired melody */
+ const melody=[
+  [523.25,0,.9],
+  [587.33,.75,.8],
+  [659.25,1.5,1.1],
+  [587.33,2.55,.8],
+  [523.25,3.35,1.1],
+  [493.88,4.5,.9],
+  [523.25,5.35,1.1],
+  [587.33,6.45,.9],
+  [659.25,7.35,1.2],
+  [783.99,8.6,1.2],
+  [659.25,9.9,1],
+  [587.33,10.9,1.1],
+  [523.25,12.05,1.5]
+ ];
+
+ melody.forEach(([freq,offset,duration],index)=>{
+  romanticNote(freq,start+offset,duration,.075);
+
+  /* Very subtle upper harmonic for a delicate piano-like sparkle */
+  if(index===2||index===8||index===12){
+   romanticNote(freq*2,start+offset+.035,duration*.65,.009);
+  }
+ });
+
+ /* Soft high bell accents, not loud or sharp */
+ [783.99,659.25,587.33].forEach((freq,index)=>{
+  romanticNote(freq,start+1.6+index*4.2,1.8,.018);
+ });
 }
 
 /* Start only after the user's first deliberate tap */
