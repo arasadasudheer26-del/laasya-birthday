@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -133,13 +134,15 @@ button{font-family:inherit}
  text-shadow:0 0 8px #e7c98e
 }
 
-/* Embossed cover */
+/* EMBELLISHED ROYAL COVER */
 .cover{
  position:absolute;inset:0;z-index:8;
  transform-origin:left center;transform-style:preserve-3d;
  transition:transform 2.3s cubic-bezier(.2,.75,.15,1);
  border:2px solid #d3ad6c;border-radius:4px 15px 15px 4px;
  background:
+ radial-gradient(ellipse at 18% 85%,#a15a6855 0%,transparent 28%),
+ radial-gradient(ellipse at 80% 15%,#a15a6844 0%,transparent 30%),
  radial-gradient(ellipse at 50% 45%,#854557 0%,#5d293d 40%,#351323 78%,#210c18 100%);
  box-shadow:
  inset 0 0 0 4px #d4ad6a30,
@@ -167,6 +170,7 @@ button{font-family:inherit}
 .cover-corner.tr{top:25px;right:25px}
 .cover-corner.bl{bottom:25px;left:25px}
 .cover-corner.br{bottom:25px;right:25px}
+
 .cover-content{
  text-align:center;position:relative;z-index:2;
  padding:25px;width:100%
@@ -202,6 +206,73 @@ button{font-family:inherit}
  font-size:15px;color:#e7c7a6;
  font-style:italic;margin-top:12px
 }
+
+/* ROMANTIC COVER DETAILS */
+.cover-romance-glow{
+ position:absolute;
+ inset:30px;
+ pointer-events:none;
+ border-radius:10px;
+ background:
+ radial-gradient(circle at 12% 82%,#f2c98718,transparent 23%),
+ radial-gradient(circle at 90% 90%,#f2c98716,transparent 22%);
+ z-index:1
+}
+.cover-romantic-ornament{
+ position:absolute;
+ color:#e9c98e;
+ font-size:17px;
+ letter-spacing:8px;
+ opacity:.8;
+ z-index:2;
+ pointer-events:none
+}
+.cover-romantic-ornament.top{
+ top:48px;
+ left:50%;
+ transform:translateX(-50%)
+}
+.cover-romantic-ornament.bottom{
+ bottom:42px;
+ right:35px
+}
+
+/* COUPLE HUGGING ILLUSTRATION */
+.cover-couple{
+ position:absolute;
+ left:31px;
+ bottom:35px;
+ width:91px;
+ height:112px;
+ z-index:3;
+ opacity:.95;
+ filter:drop-shadow(0 0 7px #e7c78655);
+ pointer-events:none
+}
+.cover-couple svg{
+ width:100%;
+ height:100%;
+ overflow:visible
+}
+.cover-couple path,
+.cover-couple circle{
+ stroke:#f1d39b;
+ stroke-width:2.2;
+ stroke-linecap:round;
+ stroke-linejoin:round;
+ fill:none
+}
+.cover-couple .couple-fill{
+ fill:#d9b77b;
+ stroke:#f5dfb1;
+ stroke-width:1.2
+}
+.cover-couple .couple-heart{
+ fill:#e8a0ad;
+ stroke:#f4d2aa;
+ stroke-width:1
+}
+
 .book.open .cover{transform:rotateY(-165deg)}
 .book.open .cover-content{opacity:0;transition:opacity .5s}
 
@@ -243,7 +314,7 @@ button{font-family:inherit}
  margin-bottom:4px;z-index:2;flex-shrink:0
 }
 
-/* LARGE PRINTED PHOTO AREA */
+/* PHOTO AREA - EDGE TO EDGE FIT */
 .photo-window{
  flex:1 1 0;
  min-height:0;
@@ -251,7 +322,7 @@ button{font-family:inherit}
  position:relative;
  z-index:2;
  margin:0;
- padding:3px;
+ padding:0;
  background:
  linear-gradient(135deg,#e8d8b9,#f4e8ce 45%,#dfcba7);
  border:1px solid #b58d55;
@@ -276,13 +347,14 @@ button{font-family:inherit}
  height:100%;
  min-height:0;
  display:block;
- object-fit:contain;
+ object-fit:cover;
  object-position:center;
- background:#f1e3c8;
+ background:transparent;
  padding:0;
  border:0;
- filter:sepia(.16) saturate(.88) contrast(.96);
- transition:opacity .25s
+ filter:sepia(.13) saturate(.90) contrast(.97);
+ transition:opacity .25s;
+ opacity:0
 }
 
 /* ONLY ONE SMALL CAPTION */
@@ -477,6 +549,12 @@ button{font-family:inherit}
  .cover-corner.tr{top:22px;right:21px}
  .cover-corner.bl{bottom:22px;left:21px}
  .cover-corner.br{bottom:22px;right:21px}
+ .cover-couple{
+  left:25px;
+  bottom:29px;
+  width:78px;
+  height:96px
+ }
 }
 @media(min-width:600px){
  .book-stage{width:440px;height:650px}
@@ -516,7 +594,7 @@ button{font-family:inherit}
     <div class="page-ornament">✦ ♡ ✦</div>
 
     <div class="photo-window">
-     <img id="memoryImage" src="" alt="Our memory">
+     <img id="memoryImage" alt="Our memory">
     </div>
 
     <div class="photo-caption" id="memoryCaption">
@@ -534,6 +612,61 @@ button{font-family:inherit}
     <span class="cover-corner bl">❧</span>
     <span class="cover-corner br">❧</span>
 
+    <div class="cover-romance-glow"></div>
+    <div class="cover-romantic-ornament top">✦ ♡ ✦</div>
+    <div class="cover-romantic-ornament bottom">♡ ✦</div>
+
+    <!-- ROMANTIC HUGGING COUPLE ILLUSTRATION -->
+    <div class="cover-couple">
+     <svg viewBox="0 0 100 120" aria-label="Romantic couple hugging illustration">
+
+      <!-- Back person's hair -->
+      <path class="couple-fill"
+       d="M22 29 Q13 10 29 7 Q44 3 49 19 Q53 31 42 39 L29 43 Z"/>
+
+      <!-- Front person's hair -->
+      <path class="couple-fill"
+       d="M49 34 Q45 12 63 9 Q81 8 83 26 Q85 39 72 46 L54 45 Z"/>
+
+      <!-- Heads -->
+      <path class="couple-fill"
+       d="M24 25 Q25 13 36 15 Q47 17 44 31 Q42 43 33 44 Q24 41 24 25Z"/>
+
+      <path class="couple-fill"
+       d="M51 26 Q54 14 67 17 Q78 20 76 34 Q74 45 64 47 Q53 42 51 26Z"/>
+
+      <!-- Hair detail -->
+      <path d="M24 24 Q31 9 44 22 M52 23 Q63 9 77 25"/>
+
+      <!-- Bodies embracing -->
+      <path class="couple-fill"
+       d="M18 53 Q18 43 31 43 Q43 42 49 54
+       L54 83 Q51 102 36 108
+       L12 94 Q16 73 18 53Z"/>
+
+      <path class="couple-fill"
+       d="M50 54 Q55 42 69 46 Q84 49 85 63
+       L91 94 Q76 110 57 107
+       Q48 94 46 77Z"/>
+
+      <!-- Hugging arms -->
+      <path d="M23 56 Q42 72 60 74 Q74 75 82 65"/>
+      <path d="M76 58 Q65 79 46 80 Q31 80 24 69"/>
+
+      <!-- Joined embrace -->
+      <path d="M31 69 Q45 85 61 85 Q73 85 79 75"/>
+
+      <!-- Small romantic heart -->
+      <path class="couple-heart"
+       d="M46 96
+       C37 86 27 96 46 108
+       C65 96 55 86 46 96Z"/>
+
+      <!-- Decorative base -->
+      <path d="M15 112 Q48 105 88 112"/>
+     </svg>
+    </div>
+
     <div class="cover-content">
      <div class="cover-crown">♛</div>
      <div class="cover-divider">✦</div>
@@ -543,6 +676,7 @@ button{font-family:inherit}
      <div class="cover-heart">♡</div>
      <div class="cover-note">A thousand memories, one heart.</div>
     </div>
+
    </div>
 
   </div>
@@ -646,6 +780,18 @@ const memories=[
 {src:"images/memory-09.jpg",text:"And if I could begin again, I would still choose you. Forever. ♡"}
 ];
 
+/* PRELOAD ALL 9 MEMORY PHOTOS */
+const memoryPreloads=memories.map(item=>{
+ return new Promise(resolve=>{
+  const preload=new Image();
+
+  preload.onload=()=>resolve(true);
+  preload.onerror=()=>resolve(false);
+
+  preload.src=item.src;
+ });
+});
+
 let currentMemory=0;
 let bookOpened=false;
 let pageBusy=false;
@@ -659,20 +805,31 @@ const pageNumber=document.getElementById("pageNumber");
 const flipSheet=document.getElementById("flipSheet");
 const swipeGuide=document.getElementById("swipeGuide");
 
-function showMemory(index){
+async function showMemory(index){
  const item=memories[index];
 
  image.style.opacity="0";
  caption.style.opacity="0";
 
+ const loaded=await memoryPreloads[index];
+
  setTimeout(()=>{
-  image.src=item.src;
-  caption.textContent=item.text;
+  if(loaded){
+   image.style.display="block";
+   image.src=item.src;
+  }else{
+   image.removeAttribute("src");
+   image.style.display="none";
+  }
+
+  caption.textContent=loaded
+   ?item.text
+   :"A memory worth keeping forever. ❤️";
 
   pageNumber.textContent=
    String(index+1).padStart(2,"0")+" / 09";
 
-  image.style.opacity="1";
+  image.style.opacity=loaded?"1":"0";
   caption.style.opacity="1";
 
   document.getElementById("progressText").textContent=
@@ -682,8 +839,10 @@ function showMemory(index){
 
 image.onerror=()=>{
  image.alt="Memory image could not be loaded";
- image.style.opacity="1";
+ image.style.opacity="0";
+ image.style.display="none";
  caption.textContent="A memory worth keeping forever. ❤️";
+ caption.style.opacity="1";
 };
 
 function openBook(){
