@@ -442,6 +442,182 @@ const instruction=document.getElementById("instruction");
 
 let started=false;
 
+/* AUDIO: BACKGROUND MUSIC */
+const backgroundMusic=new Audio("audio/romantic.mp3");
+backgroundMusic.loop=true;
+backgroundMusic.volume=0.24;
+backgroundMusic.preload="auto";
+
+/* AUDIO: SHARED SOUND CONTEXT */
+let soundContext=null;
+
+function getSoundContext(){
+ try{
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return null;
+
+  if(!soundContext){
+   soundContext=new AC();
+  }
+
+  if(soundContext.state==="suspended"){
+   soundContext.resume();
+  }
+
+  return soundContext;
+ }catch(e){
+  return null;
+ }
+}
+
+/* AUDIO: START MUSIC AFTER FIRST USER ACTION */
+function startBackgroundMusic(){
+ try{
+  backgroundMusic.play().catch(()=>{});
+ }catch(e){}
+}
+
+/* AUDIO: BOW DRAW */
+function playDrawSound(){
+ const ctx=getSoundContext();
+ if(!ctx)return;
+
+ try{
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  const filter=ctx.createBiquadFilter();
+
+  osc.type="triangle";
+  osc.frequency.setValueAtTime(170,ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(390,ctx.currentTime+.42);
+
+  filter.type="lowpass";
+  filter.frequency.setValueAtTime(700,ctx.currentTime);
+  filter.frequency.linearRampToValueAtTime(1300,ctx.currentTime+.42);
+
+  gain.gain.setValueAtTime(.001,ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(.075,ctx.currentTime+.12);
+  gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.46);
+
+  osc.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start();
+  osc.stop(ctx.currentTime+.48);
+ }catch(e){}
+}
+
+/* AUDIO: ARROW RELEASE AND FLIGHT WHOOSH */
+function playArrowWhoosh(){
+ const ctx=getSoundContext();
+ if(!ctx)return;
+
+ try{
+  const duration=.65;
+  const bufferSize=Math.floor(ctx.sampleRate*duration);
+  const buffer=ctx.createBuffer(1,bufferSize,ctx.sampleRate);
+  const data=buffer.getChannelData(0);
+
+  for(let i=0;i<bufferSize;i++){
+   const fade=1-(i/bufferSize);
+   data[i]=(Math.random()*2-1)*fade;
+  }
+
+  const noise=ctx.createBufferSource();
+  const filter=ctx.createBiquadFilter();
+  const gain=ctx.createGain();
+
+  noise.buffer=buffer;
+
+  filter.type="bandpass";
+  filter.frequency.setValueAtTime(1100,ctx.currentTime);
+  filter.frequency.exponentialRampToValueAtTime(350,ctx.currentTime+.55);
+  filter.Q.value=.7;
+
+  gain.gain.setValueAtTime(.001,ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(.16,ctx.currentTime+.07);
+  gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.62);
+
+  noise.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+
+  noise.start();
+  noise.stop(ctx.currentTime+.65);
+
+  const release=ctx.createOscillator();
+  const releaseGain=ctx.createGain();
+
+  release.type="sine";
+  release.frequency.setValueAtTime(420,ctx.currentTime);
+  release.frequency.exponentialRampToValueAtTime(180,ctx.currentTime+.16);
+
+  releaseGain.gain.setValueAtTime(.09,ctx.currentTime);
+  releaseGain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.18);
+
+  release.connect(releaseGain);
+  releaseGain.connect(ctx.destination);
+
+  release.start();
+  release.stop(ctx.currentTime+.19);
+ }catch(e){}
+}
+
+/* AUDIO: ORIGINAL BALLOON BURST SOUND RETAINED */
+function playBurstSound(){
+ try{
+  const ctx=getSoundContext();
+  if(!ctx)return;
+
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+
+  osc.type="sine";
+  osc.frequency.setValueAtTime(620,ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(150,ctx.currentTime+.22);
+
+  gain.gain.setValueAtTime(.13,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.26);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start();
+  osc.stop(ctx.currentTime+.27);
+ }catch(e){}
+}
+
+/* AUDIO: MAGICAL HEART REVEAL CHIME */
+function playRevealChime(){
+ const ctx=getSoundContext();
+ if(!ctx)return;
+
+ try{
+  const notes=[659.25,783.99,987.77];
+
+  notes.forEach((frequency,index)=>{
+   const osc=ctx.createOscillator();
+   const gain=ctx.createGain();
+
+   const startTime=ctx.currentTime+(index*.09);
+
+   osc.type="sine";
+   osc.frequency.setValueAtTime(frequency,startTime);
+
+   gain.gain.setValueAtTime(.001,startTime);
+   gain.gain.linearRampToValueAtTime(.045,startTime+.035);
+   gain.gain.exponentialRampToValueAtTime(.001,startTime+.65);
+
+   osc.connect(gain);
+   gain.connect(ctx.destination);
+
+   osc.start(startTime);
+   osc.stop(startTime+.68);
+  });
+ }catch(e){}
+}
+
 /* STARS */
 const stars=document.getElementById("stars");
 
@@ -493,44 +669,17 @@ function createHearts(){
  }
 }
 
-/* BURST SOUND */
-function playBurstSound(){
- try{
-  const AC=window.AudioContext||window.webkitAudioContext;
-  if(!AC)return;
-
-  const ctx=new AC();
-  const osc=ctx.createOscillator();
-  const gain=ctx.createGain();
-
-  osc.type="sine";
-  osc.frequency.setValueAtTime(620,ctx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(150,ctx.currentTime+.22);
-
-  gain.gain.setValueAtTime(.13,ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.26);
-
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-
-  osc.start();
-  osc.stop(ctx.currentTime+.27);
-
-  osc.onended=()=>ctx.close();
- }catch(e){}
-}
-
-/* ARROW FLIGHT */
+/* FLYING ARROW - FIXED SIZE AND ACCURATE IMPACT */
 function launchArrow(){
  const sceneRect=scene.getBoundingClientRect();
  const archerRect=archer.getBoundingClientRect();
  const balloonRect=balloon.getBoundingClientRect();
 
- // Arrow starts at the top-center area of the archer.
+ // Arrow starting point at the archer.
  const startX=archerRect.left-sceneRect.left+archerRect.width/2;
  const startY=archerRect.top-sceneRect.top+archerRect.height*.43;
 
- // Exact center of the balloon.
+ // Exact center of the heart balloon.
  const targetX=balloonRect.left-sceneRect.left+balloonRect.width/2;
  const targetY=balloonRect.top-sceneRect.top+balloonRect.height/2;
 
@@ -538,24 +687,34 @@ function launchArrow(){
  const dy=targetY-startY;
 
  const angle=Math.atan2(dy,dx)*180/Math.PI;
- const distance=Math.hypot(dx,dy);
+ const radians=Math.atan2(dy,dx);
 
+ // Keep the arrow at its original fixed size.
+ const arrowWidth=52;
+
+ // Full distance from arrow origin to arrow tip.
+ const tipLength=83;
+
+ // Position the arrow so its tip reaches the balloon center.
+ const endX=targetX-Math.cos(radians)*tipLength;
+ const endY=targetY-Math.sin(radians)*tipLength;
+
+ flyingArrow.style.width=arrowWidth+"px";
  flyingArrow.style.left=startX+"px";
- flyingArrow.style.top=startY+"px";
- flyingArrow.style.width=Math.max(52,distance)+"px";
+ flyingArrow.style.top=(startY-2)+"px";
  flyingArrow.style.transform=`rotate(${angle}deg)`;
  flyingArrow.style.opacity="1";
 
  flyingArrow.animate([
   {
    left:startX+"px",
-   top:startY+"px",
+   top:(startY-2)+"px",
    transform:`rotate(${angle}deg)`,
    opacity:1
   },
   {
-   left:targetX+"px",
-   top:targetY+"px",
+   left:endX+"px",
+   top:(endY-2)+"px",
    transform:`rotate(${angle}deg)`,
    opacity:1
   }
@@ -573,6 +732,10 @@ function shootArrow(){
  started=true;
  archer.style.pointerEvents="none";
 
+ /* AUDIO: MUSIC AND BOW DRAW */
+ startBackgroundMusic();
+ playDrawSound();
+
  instruction.textContent="Drawing the bow... aiming for your heart. ❤️";
  archer.classList.add("pulling");
 
@@ -581,6 +744,10 @@ function shootArrow(){
   archer.classList.add("releasing");
 
   instruction.textContent="And the arrow flies... ❤️";
+
+  /* AUDIO: ARROW RELEASE */
+  playArrowWhoosh();
+
   launchArrow();
  },500);
 
@@ -590,7 +757,10 @@ function shootArrow(){
 
   createBurstPieces();
   createHearts();
+
+  /* AUDIO: BALLOON IMPACT AND HEART REVEAL */
   playBurstSound();
+  playRevealChime();
  },1200);
 
  // Direct navigation to Stage 2.
