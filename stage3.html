@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -237,42 +236,32 @@ button{font-family:inherit}
  right:35px
 }
 
-/* COUPLE HUGGING ILLUSTRATION */
+/* UPGRADED 3D GOLDEN COUPLE SCULPTURE */
 .cover-couple{
  position:absolute;
- left:31px;
- bottom:35px;
- width:91px;
- height:112px;
+ left:43px;
+ bottom:34px;
+ width:125px;
+ height:153px;
  z-index:3;
- opacity:.95;
- filter:drop-shadow(0 0 7px #e7c78655);
- pointer-events:none
+ opacity:1;
+ pointer-events:none;
+ overflow:visible;
+ filter:
+  drop-shadow(0 9px 5px #080309bb)
+  drop-shadow(0 0 12px #e7c78665);
+ animation:coupleGlow 4s ease-in-out infinite alternate
 }
 .cover-couple svg{
  width:100%;
  height:100%;
- overflow:visible
+ overflow:visible;
+ display:block
 }
-.cover-couple path,
-.cover-couple circle{
- stroke:#f1d39b;
- stroke-width:2.2;
- stroke-linecap:round;
- stroke-linejoin:round;
- fill:none
+@keyframes coupleGlow{
+ from{filter:drop-shadow(0 8px 5px #080309bb) drop-shadow(0 0 7px #d8a85b55)}
+ to{filter:drop-shadow(0 10px 7px #080309dd) drop-shadow(0 0 15px #f5d58b99)}
 }
-.cover-couple .couple-fill{
- fill:#d9b77b;
- stroke:#f5dfb1;
- stroke-width:1.2
-}
-.cover-couple .couple-heart{
- fill:#e8a0ad;
- stroke:#f4d2aa;
- stroke-width:1
-}
-
 .book.open .cover{transform:rotateY(-165deg)}
 .book.open .cover-content{opacity:0;transition:opacity .5s}
 
@@ -549,11 +538,12 @@ button{font-family:inherit}
  .cover-corner.tr{top:22px;right:21px}
  .cover-corner.bl{bottom:22px;left:21px}
  .cover-corner.br{bottom:22px;right:21px}
+
  .cover-couple{
-  left:25px;
+  left:36px;
   bottom:29px;
-  width:78px;
-  height:96px
+  width:108px;
+  height:132px
  }
 }
 @media(min-width:600px){
@@ -561,6 +551,12 @@ button{font-family:inherit}
  .single-page{left:39px;right:15px;padding:12px}
  .flip-sheet{left:39px;right:15px}
  .photo-caption{font-size:26px}
+ .cover-couple{
+  left:48px;
+  bottom:38px;
+  width:135px;
+  height:165px
+ }
 }
 </style>
 </head>
@@ -616,54 +612,232 @@ button{font-family:inherit}
     <div class="cover-romantic-ornament top">✦ ♡ ✦</div>
     <div class="cover-romantic-ornament bottom">♡ ✦</div>
 
-    <!-- ROMANTIC HUGGING COUPLE ILLUSTRATION -->
+    <!-- PREMIUM 3D GOLDEN HUGGING COUPLE -->
     <div class="cover-couple">
-     <svg viewBox="0 0 100 120" aria-label="Romantic couple hugging illustration">
+     <svg viewBox="0 0 180 220" role="img" aria-label="Three dimensional golden sculpture of a couple embracing">
 
-      <!-- Back person's hair -->
-      <path class="couple-fill"
-       d="M22 29 Q13 10 29 7 Q44 3 49 19 Q53 31 42 39 L29 43 Z"/>
+      <defs>
+       <linearGradient id="goldBody" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#fff0b5"/>
+        <stop offset=".18" stop-color="#f5d98d"/>
+        <stop offset=".42" stop-color="#bd873d"/>
+        <stop offset=".62" stop-color="#f8d995"/>
+        <stop offset=".82" stop-color="#93602c"/>
+        <stop offset="1" stop-color="#f4d18a"/>
+       </linearGradient>
 
-      <!-- Front person's hair -->
-      <path class="couple-fill"
-       d="M49 34 Q45 12 63 9 Q81 8 83 26 Q85 39 72 46 L54 45 Z"/>
+       <linearGradient id="goldLight" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#fff9d9"/>
+        <stop offset=".35" stop-color="#f5d78f"/>
+        <stop offset=".7" stop-color="#c18b43"/>
+        <stop offset="1" stop-color="#70451f"/>
+       </linearGradient>
 
-      <!-- Heads -->
-      <path class="couple-fill"
-       d="M24 25 Q25 13 36 15 Q47 17 44 31 Q42 43 33 44 Q24 41 24 25Z"/>
+       <linearGradient id="goldShadow" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#75451f"/>
+        <stop offset=".35" stop-color="#d5a85c"/>
+        <stop offset=".7" stop-color="#ffe7a5"/>
+        <stop offset="1" stop-color="#93602c"/>
+       </linearGradient>
 
-      <path class="couple-fill"
-       d="M51 26 Q54 14 67 17 Q78 20 76 34 Q74 45 64 47 Q53 42 51 26Z"/>
+       <linearGradient id="dressGold" x1="0" y1="0" x2=".8" y2="1">
+        <stop offset="0" stop-color="#fff0bc"/>
+        <stop offset=".28" stop-color="#d6a75c"/>
+        <stop offset=".55" stop-color="#f8d994"/>
+        <stop offset=".8" stop-color="#a36d32"/>
+        <stop offset="1" stop-color="#f3d18a"/>
+       </linearGradient>
 
-      <!-- Hair detail -->
-      <path d="M24 24 Q31 9 44 22 M52 23 Q63 9 77 25"/>
+       <radialGradient id="goldFace">
+        <stop offset="0" stop-color="#fff1c0"/>
+        <stop offset=".65" stop-color="#e6bd72"/>
+        <stop offset="1" stop-color="#98612e"/>
+       </radialGradient>
 
-      <!-- Bodies embracing -->
-      <path class="couple-fill"
-       d="M18 53 Q18 43 31 43 Q43 42 49 54
-       L54 83 Q51 102 36 108
-       L12 94 Q16 73 18 53Z"/>
+       <filter id="sculptureShadow" x="-40%" y="-30%" width="180%" height="180%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+        <feOffset dy="4" dx="2" result="offset"/>
+        <feComponentTransfer>
+         <feFuncA type="linear" slope=".65"/>
+        </feComponentTransfer>
+        <feMerge>
+         <feMergeNode/>
+         <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+       </filter>
+      </defs>
 
-      <path class="couple-fill"
-       d="M50 54 Q55 42 69 46 Q84 49 85 63
-       L91 94 Q76 110 57 107
-       Q48 94 46 77Z"/>
+      <!-- Ground shadow -->
+      <ellipse cx="91" cy="207" rx="58" ry="7" fill="#100711" opacity=".65"/>
 
-      <!-- Hugging arms -->
-      <path d="M23 56 Q42 72 60 74 Q74 75 82 65"/>
-      <path d="M76 58 Q65 79 46 80 Q31 80 24 69"/>
+      <g filter="url(#sculptureShadow)">
 
-      <!-- Joined embrace -->
-      <path d="M31 69 Q45 85 61 85 Q73 85 79 75"/>
+       <!-- BACK FIGURE: HAIR -->
+       <path d="M35 56
+        C22 43 24 23 39 14
+        C53 5 73 12 79 28
+        C85 43 77 58 68 69
+        L43 76Z"
+        fill="url(#goldShadow)" stroke="#ffe7a4" stroke-width="1.5"/>
 
-      <!-- Small romantic heart -->
-      <path class="couple-heart"
-       d="M46 96
-       C37 86 27 96 46 108
-       C65 96 55 86 46 96Z"/>
+       <path d="M31 39
+        C36 19 54 13 70 25
+        C62 20 48 25 43 37
+        C39 46 43 58 48 65
+        L37 62Z"
+        fill="#8e5a2b" opacity=".65"/>
 
-      <!-- Decorative base -->
-      <path d="M15 112 Q48 105 88 112"/>
+       <!-- FRONT FIGURE: HAIR -->
+       <path d="M91 45
+        C86 24 101 9 119 11
+        C139 11 151 29 146 47
+        C143 62 131 72 116 75
+        L98 65Z"
+        fill="url(#goldShadow)" stroke="#ffe8ad" stroke-width="1.5"/>
+
+       <path d="M96 36
+        C103 16 124 15 137 28
+        C126 20 111 28 108 41
+        C105 51 112 64 119 69
+        L101 63Z"
+        fill="#855326" opacity=".65"/>
+
+       <!-- BACK PERSON FACE -->
+       <path d="M39 37
+        C43 24 59 21 68 31
+        C77 41 72 59 63 69
+        C54 77 42 67 38 55
+        C35 48 36 42 39 37Z"
+        fill="url(#goldFace)" stroke="#fff0bd" stroke-width="1.5"/>
+
+       <!-- FRONT PERSON FACE -->
+       <path d="M101 34
+        C108 23 126 24 135 36
+        C142 48 135 65 124 72
+        C113 78 101 66 98 54
+        C96 46 97 39 101 34Z"
+        fill="url(#goldFace)" stroke="#fff0bd" stroke-width="1.5"/>
+
+       <!-- Face highlights -->
+       <path d="M42 39 Q48 28 60 31"
+        fill="none" stroke="#fff8d8" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>
+
+       <path d="M104 37 Q114 28 126 33"
+        fill="none" stroke="#fff8d8" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>
+
+       <!-- NECKS -->
+       <path d="M48 66 L49 83 L68 88 L70 67Z"
+        fill="url(#goldBody)" stroke="#f7d995" stroke-width="1"/>
+
+       <path d="M113 68 L111 84 L129 89 L128 68Z"
+        fill="url(#goldBody)" stroke="#f7d995" stroke-width="1"/>
+
+       <!-- BACK PERSON BODY -->
+       <path d="M44 81
+        C31 83 25 94 24 111
+        L17 181
+        C35 194 58 198 80 188
+        L89 117
+        C87 96 77 84 63 81
+        Z"
+        fill="url(#goldBody)" stroke="#ffe7a6" stroke-width="1.8"/>
+
+       <!-- FRONT PERSON BODY / DRESS -->
+       <path d="M110 82
+        C94 80 84 93 81 109
+        L72 178
+        C88 198 119 202 148 184
+        L143 113
+        C141 94 128 83 110 82Z"
+        fill="url(#dressGold)" stroke="#ffebaf" stroke-width="1.8"/>
+
+       <!-- Dress flowing folds -->
+       <path d="M99 99 Q108 132 93 180"
+        fill="none" stroke="#fff0bb" stroke-width="2.2" opacity=".8"/>
+
+       <path d="M119 96 Q129 133 133 179"
+        fill="none" stroke="#9b672e" stroke-width="2" opacity=".6"/>
+
+       <path d="M108 105 Q115 145 111 188"
+        fill="none" stroke="#fff4ce" stroke-width="1.4" opacity=".7"/>
+
+       <!-- BACK SHOULDER HIGHLIGHT -->
+       <path d="M33 95 Q43 83 57 87"
+        fill="none" stroke="#fff4c7" stroke-width="3" stroke-linecap="round"/>
+
+       <!-- EMBRACING ARM FROM BACK PERSON -->
+       <path d="M31 94
+        C43 105 58 113 77 112
+        C96 110 108 99 116 91
+        C121 86 128 92 124 99
+        C112 118 96 130 77 130
+        C57 130 39 118 27 108Z"
+        fill="url(#goldLight)" stroke="#fff0b9" stroke-width="1.8"/>
+
+       <!-- ARM HIGHLIGHT -->
+       <path d="M39 105 Q63 125 87 118 Q105 112 116 98"
+        fill="none" stroke="#fff7d3" stroke-width="2.5" stroke-linecap="round" opacity=".9"/>
+
+       <!-- SECOND EMBRACING ARM -->
+       <path d="M132 91
+        C145 103 146 118 133 129
+        C119 142 98 146 80 137
+        C72 133 75 124 83 123
+        C99 129 117 121 126 110
+        C132 103 126 96 124 94Z"
+        fill="url(#goldBody)" stroke="#ffebae" stroke-width="1.8"/>
+
+       <!-- HAND DETAIL -->
+       <path d="M76 126 Q83 119 90 125 Q95 131 88 136"
+        fill="none" stroke="#fff2c3" stroke-width="2" stroke-linecap="round"/>
+
+       <!-- WAIST / CLOTHING DETAILS -->
+       <path d="M76 151 Q105 161 141 145"
+        fill="none" stroke="#a66e31" stroke-width="2" opacity=".7"/>
+
+       <path d="M74 157 Q104 168 143 153"
+        fill="none" stroke="#fff0b6" stroke-width="1.6" opacity=".8"/>
+
+       <!-- LOWER SCULPTURE BASE -->
+       <path d="M19 184
+        Q85 195 151 184
+        L159 196
+        Q88 211 12 197Z"
+        fill="url(#goldShadow)" stroke="#ffebad" stroke-width="1.5"/>
+
+       <path d="M20 188 Q85 200 151 188"
+        fill="none" stroke="#fff4c9" stroke-width="2" opacity=".9"/>
+
+       <!-- GOLDEN HEART -->
+       <path d="M87 145
+        C76 132 63 144 87 163
+        C111 144 98 132 87 145Z"
+        fill="#d98b91" stroke="#ffe6b4" stroke-width="2"/>
+
+       <path d="M78 145 Q83 140 87 147"
+        fill="none" stroke="#fff3d0" stroke-width="1.5" stroke-linecap="round"/>
+
+       <!-- SCULPTURE LIGHT REFLECTIONS -->
+       <path d="M27 112 Q24 142 23 172"
+        fill="none" stroke="#fff0b9" stroke-width="2" opacity=".8"/>
+
+       <path d="M145 119 Q151 148 149 171"
+        fill="none" stroke="#fff0b9" stroke-width="2" opacity=".7"/>
+
+       <path d="M56 82 Q67 87 73 99"
+        fill="none" stroke="#fff4ca" stroke-width="2" opacity=".7"/>
+
+       <path d="M119 83 Q132 89 137 102"
+        fill="none" stroke="#fff4ca" stroke-width="2" opacity=".7"/>
+
+      </g>
+
+      <!-- Tiny decorative golden sparkles -->
+      <g fill="#ffe8aa">
+       <path d="M14 48 L17 55 L24 58 L17 61 L14 68 L11 61 L4 58 L11 55Z"/>
+       <path d="M157 73 L159 78 L164 80 L159 82 L157 87 L155 82 L150 80 L155 78Z"/>
+      </g>
+
      </svg>
     </div>
 
