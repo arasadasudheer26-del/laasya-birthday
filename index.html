@@ -260,43 +260,10 @@ body{background:#160914;color:white;font-family:'Cormorant Garamond',serif}
  100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.5)}
 }
 
-/* HEART TRANSITION */
-.transition-heart{
- position:absolute;left:50%;top:35%;
- transform:translate(-50%,-50%) scale(0);
- font-size:60px;color:#ffb4d1;opacity:0;z-index:20;
- text-shadow:0 0 25px #ff4b91,0 0 70px #ff9fc8;
- pointer-events:none;
-}
-.scene.transition .transition-heart{
- animation:heartGrow 1.45s ease-in forwards;
-}
-@keyframes heartGrow{
- 0%{opacity:0;transform:translate(-50%,-50%) scale(0)}
- 35%{opacity:1;transform:translate(-50%,-50%) scale(1.5)}
- 70%{opacity:1;transform:translate(-50%,-50%) scale(2.5)}
- 100%{opacity:1;transform:translate(-50%,-50%) scale(35)}
-}
-.screen-wash{
- position:absolute;inset:0;
- background:radial-gradient(circle,#ffe1ed,#f48bb6 35%,#31101f);
- opacity:0;z-index:15;pointer-events:none;
-}
-.scene.transition .screen-wash{
- animation:wash .65s ease-in .8s forwards;
-}
-@keyframes wash{to{opacity:1}}
-
 .instruction{
  position:absolute;bottom:2%;left:0;width:100%;
  text-align:center;padding:0 12px;
  color:#f7dce7;font-size:16px;letter-spacing:1px;z-index:4;
-}
-.scene.done .heading,
-.scene.done .instruction,
-.scene.done .archer,
-.scene.done .tap-label{
- opacity:0;transition:opacity .35s;
 }
 
 /* MOBILE */
@@ -464,8 +431,6 @@ body{background:#160914;color:white;font-family:'Cormorant Garamond',serif}
 
  <div class="flying-arrow" id="flyingArrow"></div>
  <div class="flash"></div>
- <div class="transition-heart">♥</div>
- <div class="screen-wash"></div>
 </div>
 
 <script>
@@ -628,15 +593,8 @@ function shootArrow(){
   playBurstSound();
  },1200);
 
- setTimeout(()=>{
-  scene.classList.add("transition");
- },1900);
-
- setTimeout(()=>{
-  scene.classList.add("done");
- },2700);
-
- // Stage 2 redirect
+ // Direct navigation to Stage 2.
+ // No heart zoom, screen wash or fade transition.
  setTimeout(()=>{
   window.location.href="stage2.html";
  },3100);
