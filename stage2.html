@@ -96,10 +96,33 @@ footer{margin-top:35px;color:#d8b6bf;font-size:17px}
 .particle{position:fixed;z-index:20;bottom:-35px;pointer-events:none;animation:floatUp 5s linear forwards}
 @keyframes floatUp{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:1}100%{transform:translateY(-110vh) rotate(360deg);opacity:0}}
 .sparkle{position:fixed;pointer-events:none;z-index:0;color:#ffe4a4;animation:twinkle 2s ease-in-out infinite alternate}
-@keyframes twinkle{to{opacity:.9;transform:scale(1.3)}}
-#transition{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#7a3451,#210d1b);opacity:0;pointer-events:none;transition:opacity 1s}
-#transition.active{opacity:1;pointer-events:auto}
-#transition span{font-family:'Great Vibes';font-size:clamp(42px,10vw,70px);color:#ffe4a8;text-shadow:0 0 25px #f7d28b}
+
+/* FAST & SMOOTH STAGE TRANSITION */
+#transition{
+ position:fixed;
+ inset:0;
+ z-index:50;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:radial-gradient(circle at center,#71314b,#260d1b);
+ opacity:0;
+ visibility:hidden;
+ pointer-events:none;
+ transition:opacity .25s ease,visibility .25s ease;
+}
+#transition.active{
+ opacity:1;
+ visibility:visible;
+ pointer-events:auto;
+}
+#transition span{
+ font-family:'Great Vibes',cursive;
+ font-size:clamp(42px,10vw,70px);
+ color:#ffe4a8;
+ text-shadow:0 0 15px #f7d28b88;
+}
+
 @keyframes reveal{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
 @keyframes twinkle{from{opacity:.2;transform:scale(.6)}to{opacity:.9;transform:scale(1.2)}}
 @media(max-width:380px){
@@ -397,13 +420,20 @@ continueVoice.addEventListener("click",()=>{
  if(!cakeCut)startCakeCutting();
 });
 
+/* FAST STAGE 2 TO STAGE 3 NAVIGATION */
 $("nextButton").addEventListener("click",()=>{
  if(transitionStarted)return;
+
  transitionStarted=true;
  $("nextButton").disabled=true;
+
  $("transition").classList.add("active");
- setTimeout(()=>window.location.href="./stage3.html",1500);
+
+ setTimeout(()=>{
+  window.location.href="./stage3.html";
+ },280);
 });
+
 window.addEventListener("pagehide",()=>{
  stopMic();audio.pause();
 });
