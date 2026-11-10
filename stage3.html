@@ -390,6 +390,43 @@ button{font-family:inherit}
 @keyframes flipForward{to{transform:rotateY(-180deg)}}
 @keyframes flipBack{to{transform:rotateY(180deg)}}
 
+/* PAGE-TURN FALLING HEARTS */
+.page-turn-hearts{
+ position:absolute;
+ inset:0;
+ z-index:15;
+ overflow:hidden;
+ pointer-events:none;
+ border-radius:5px 15px 15px 5px;
+}
+
+.page-turn-heart{
+ position:absolute;
+ top:-35px;
+ color:#e9a5b5;
+ opacity:0;
+ font-size:var(--heart-size);
+ text-shadow:0 2px 8px #b85b7844;
+ animation:pageHeartFall var(--heart-duration) ease-in forwards;
+}
+
+@keyframes pageHeartFall{
+ 0%{
+  opacity:0;
+  transform:translate3d(0,-20px,0) rotate(0deg) scale(.65);
+ }
+ 12%{opacity:.85}
+ 50%{
+  transform:translate3d(var(--heart-drift),180px,0)
+  rotate(150deg) scale(1);
+ }
+ 100%{
+  opacity:0;
+  transform:translate3d(calc(var(--heart-drift) * -1),420px,0)
+  rotate(340deg) scale(.7);
+ }
+}
+
 /* SWIPE GUIDE */
 .swipe-guide{
  display:none;position:relative;z-index:12;width:min(92vw,390px);
@@ -601,6 +638,9 @@ button{font-family:inherit}
    </div>
 
    <div class="flip-sheet" id="flipSheet"></div>
+
+   <!-- FALLING HEARTS OVERLAY -->
+   <div class="page-turn-hearts" id="pageTurnHearts"></div>
 
    <div class="cover">
     <span class="cover-corner tl">❧</span>
@@ -942,6 +982,689 @@ button{font-family:inherit}
 
 
 <script>
+
+/* ==========================================
+   PREMIUM ROMANTIC SOUND ENGINE
+   Web Audio API - no external files required
+   Soft ambient music + layered cinematic effects
+========================================== */
+
+let romanticAudio=null;
+let audioReady=false;
+let ambientMusicTimer=null;
+let ambientChordIndex=0;
+let ambientMusicStarted=false;
+
+/* CREATE AND UNLOCK AUDIO */
+function unlockRomanticAudio(){
+ if(audioReady){
+  if(romanticAudio&&romanticAudio.state==="suspended"){
+   romanticAudio.resume();
+  }
+  return;
+ }
+
+ try{
+  const AudioContextClass=
+   window.AudioContext||window.webkitAudioContext;
+
+  if(!AudioContextClass)return;
+
+  romanticAudio=new AudioContextClass();
+  audioReady=true;
+
+  if(romanticAudio.state==="suspended"){
+   romanticAudio.resume();
+  }
+
+ }catch(error){
+  audioReady=false;
+ }
+}
+
+
+/* SOFT FILTERED SOUND TEXTURE */
+function createSoundTexture(
+ startTime,
+ duration,
+ settings={}
+){
+ if(!romanticAudio)return;
+
+ try{
+  const sampleRate=romanticAudio.sampleRate;
+  const length=Math.floor(sampleRate*duration);
+
+  const buffer=romanticAudio.createBuffer(
+   1,
+   length,
+   sampleRate
+  );
+
+  const data=buffer.getChannelData(0);
+
+  let previous=0;
+
+  for(let i=0;i<length;i++){
+   const white=Math.random()*2-1;
+
+   previous=(previous*.72)+(white*.28);
+
+   const fadeIn=Math.min(1,i/(sampleRate*.08));
+   const fadeOut=Math.min(1,(length-i)/(sampleRate*.18));
+
+   data[i]=previous*fadeIn*fadeOut;
+  }
+
+  const source=romanticAudio.createBufferSource();
+  const filter=romanticAudio.createBiquadFilter();
+  const gain=romanticAudio.createGain();
+
+  source.buffer=buffer;
+
+  filter.type=settings.filterType||"bandpass";
+  filter.frequency.setValueAtTime(
+   settings.startFrequency||1500,
+   startTime
+  );
+
+  filter.frequency.exponentialRampToValueAtTime(
+   Math.max(100,settings.endFrequency||650),
+   startTime+duration
+  );
+
+  filter.Q.value=settings.q||.7;
+
+  gain.gain.setValueAtTime(.0001,startTime);
+  gain.gain.exponentialRampToValueAtTime(
+   settings.volume||.035,
+   startTime+.07
+  );
+  gain.gain.exponentialRampToValueAtTime(
+   .0001,
+   startTime+duration
+  );
+
+  source.connect(filter);
+  filter.connect(gain);
+  gain.connect(romanticAudio.destination);
+
+  source.start(startTime);
+  source.stop(startTime+duration+.03);
+
+ }catch(error){}
+}
+
+
+/* WARM, SOFT MUSICAL TONE */
+function softTone(
+ frequency,
+ start,
+ duration,
+ volume=.012,
+ type="sine"
+){
+ if(!romanticAudio)return;
+
+ try{
+  const osc=romanticAudio.createOscillator();
+  const overtone=romanticAudio.createOscillator();
+
+  const mainGain=romanticAudio.createGain();
+  const overtoneGain=romanticAudio.createGain();
+  const master=romanticAudio.createGain();
+
+  const lowpass=romanticAudio.createBiquadFilter();
+
+  osc.type=type;
+  osc.frequency.setValueAtTime(frequency,start);
+
+  overtone.type="sine";
+  overtone.frequency.setValueAtTime(frequency*2,start);
+
+  lowpass.type="lowpass";
+  lowpass.frequency.setValueAtTime(1800,start);
+
+  mainGain.gain.setValueAtTime(.0001,start);
+  mainGain.gain.exponentialRampToValueAtTime(
+   volume,
+   start+.35
+  );
+  mainGain.gain.exponentialRampToValueAtTime(
+   .0001,
+   start+duration
+  );
+
+  overtoneGain.gain.setValueAtTime(.0001,start);
+  overtoneGain.gain.exponentialRampToValueAtTime(
+   volume*.12,
+   start+.5
+  );
+  overtoneGain.gain.exponentialRampToValueAtTime(
+   .0001,
+   start+duration
+  );
+
+  master.gain.value=1;
+
+  osc.connect(mainGain);
+  overtone.connect(overtoneGain);
+
+  mainGain.connect(lowpass);
+  overtoneGain.connect(lowpass);
+
+  lowpass.connect(master);
+  master.connect(romanticAudio.destination);
+
+  osc.start(start);
+  overtone.start(start);
+
+  osc.stop(start+duration+.1);
+  overtone.stop(start+duration+.1);
+
+ }catch(error){}
+}
+
+
+/* CONTINUOUS PEACEFUL ROMANTIC BACKGROUND MUSIC */
+function playAmbientChord(chordIndex){
+ if(!romanticAudio)return;
+
+ const progression=[
+  [261.63,329.63,392.00,493.88],
+  [220.00,261.63,329.63,392.00],
+  [174.61,220.00,261.63,329.63],
+  [196.00,246.94,293.66,392.00]
+ ];
+
+ const chord=progression[chordIndex%progression.length];
+ const now=romanticAudio.currentTime;
+
+ chord.forEach((frequency,index)=>{
+  const osc=romanticAudio.createOscillator();
+  const gain=romanticAudio.createGain();
+  const filter=romanticAudio.createBiquadFilter();
+
+  osc.type=index===0?"sine":"triangle";
+  osc.frequency.setValueAtTime(frequency,now);
+
+  filter.type="lowpass";
+  filter.frequency.value=index===0?550:950;
+
+  const volume=index===0?.012:.006;
+
+  gain.gain.setValueAtTime(.0001,now);
+  gain.gain.linearRampToValueAtTime(
+   volume,
+   now+1.7
+  );
+  gain.gain.setValueAtTime(
+   volume,
+   now+3.5
+  );
+  gain.gain.linearRampToValueAtTime(
+   .0001,
+   now+5.1
+  );
+
+  osc.connect(filter);
+  filter.connect(gain);
+  gain.connect(romanticAudio.destination);
+
+  osc.start(now);
+  osc.stop(now+5.2);
+ });
+
+ /* Very soft upper harmonic for a warm cinematic atmosphere */
+ softTone(
+  chord[2]*2,
+  now+.8,
+  3.5,
+  .0018,
+  "sine"
+ );
+}
+
+function startAmbientMusic(){
+ if(!romanticAudio||ambientMusicStarted)return;
+
+ ambientMusicStarted=true;
+ ambientChordIndex=0;
+
+ if(romanticAudio.state==="suspended"){
+  romanticAudio.resume();
+ }
+
+ playAmbientChord(ambientChordIndex);
+
+ ambientMusicTimer=setInterval(()=>{
+  if(!romanticAudio)return;
+
+  ambientChordIndex++;
+  playAmbientChord(ambientChordIndex);
+
+ },4900);
+}
+
+
+/* CINEMATIC COVER OPEN SOUND */
+function playBookOpenSound(){
+ if(!romanticAudio)return;
+
+ const now=romanticAudio.currentTime;
+
+ /* Deep soft opening whoosh */
+ createSoundTexture(now,.95,{
+  filterType:"lowpass",
+  startFrequency:650,
+  endFrequency:1900,
+  volume:.055,
+  q:.5
+ });
+
+ /* Gentle golden shimmer */
+ createSoundTexture(now+.28,1.1,{
+  filterType:"highpass",
+  startFrequency:2100,
+  endFrequency:900,
+  volume:.012,
+  q:.8
+ });
+
+ /* Warm harmonic swell */
+ softTone(261.63,now,2.3,.018,"sine");
+ softTone(392,now+.18,2.1,.012,"sine");
+ softTone(523.25,now+.38,1.8,.008,"sine");
+}
+
+
+/* PREMIUM HARD COVER CLOSING SOUND */
+function playBookCloseSound(){
+ if(!romanticAudio)return;
+
+ const now=romanticAudio.currentTime;
+
+ /* Low, soft hardcover impact */
+ createSoundTexture(now,.48,{
+  filterType:"lowpass",
+  startFrequency:420,
+  endFrequency:110,
+  volume:.085,
+  q:.55
+ });
+
+ /* Leather and paper resonance */
+ createSoundTexture(now+.045,.75,{
+  filterType:"bandpass",
+  startFrequency:1250,
+  endFrequency:380,
+  volume:.035,
+  q:.65
+ });
+
+ /* Gentle closing resonance */
+ softTone(174.61,now,.95,.025,"sine");
+ softTone(261.63,now+.08,1.15,.012,"sine");
+}
+
+
+/* TREE GROWTH CINEMATIC SWELL */
+function playTreeGrowthSound(){
+ if(!romanticAudio)return;
+
+ const now=romanticAudio.currentTime;
+
+ createSoundTexture(now,2.5,{
+  filterType:"lowpass",
+  startFrequency:280,
+  endFrequency:1800,
+  volume:.035,
+  q:.45
+ });
+
+ softTone(130.81,now,3,.018,"sine");
+ softTone(196,now+.35,2.7,.012,"sine");
+ softTone(261.63,now+.7,2.3,.009,"sine");
+}
+
+
+/* HEART CANOPY / MAGIC SPARKLE SOUND */
+function playHeartCanopySound(){
+ if(!romanticAudio)return;
+
+ const now=romanticAudio.currentTime;
+
+ createSoundTexture(now,1.5,{
+  filterType:"highpass",
+  startFrequency:2600,
+  endFrequency:1200,
+  volume:.012,
+  q:.6
+ });
+
+ softTone(659.25,now+.1,1.5,.006,"sine");
+ softTone(783.99,now+.35,1.6,.005,"sine");
+ softTone(987.77,now+.6,1.7,.004,"sine");
+}
+
+
+/* SOFT PHOTO REVEAL SOUND */
+function playPhotoRevealSound(){
+ if(!romanticAudio)return;
+
+ const now=romanticAudio.currentTime;
+
+ createSoundTexture(now,.85,{
+  filterType:"highpass",
+  startFrequency:2400,
+  endFrequency:1300,
+  volume:.008,
+  q:.7
+ });
+
+ softTone(523.25,now+.08,1.15,.0045,"sine");
+ softTone(659.25,now+.22,1.2,.0035,"sine");
+}
+
+
+/* ROMANTIC ACTION SOUND ROUTER */
+function playRomanticSound(action){
+ if(!romanticAudio)return;
+
+ if(romanticAudio.state==="suspended"){
+  romanticAudio.resume();
+ }
+
+ switch(action){
+
+  case "open":
+   playBookOpenSound();
+   break;
+
+  case "reveal":
+   playPhotoRevealSound();
+   break;
+
+  case "next":
+   softTone(659.25,romanticAudio.currentTime,.7,.0035);
+   break;
+
+  case "previous":
+   softTone(523.25,romanticAudio.currentTime,.7,.0035);
+   break;
+
+  case "transition":
+   playBookCloseSound();
+   break;
+
+  case "tree":
+   playTreeGrowthSound();
+   break;
+
+  case "leaves":
+   playHeartCanopySound();
+   break;
+
+  case "restart":
+   softTone(392,romanticAudio.currentTime,.8,.004);
+   break;
+
+  case "letter":
+   createSoundTexture(romanticAudio.currentTime,.9,{
+    filterType:"lowpass",
+    startFrequency:500,
+    endFrequency:1500,
+    volume:.025
+   });
+   softTone(261.63,romanticAudio.currentTime,1.5,.012);
+   softTone(392,romanticAudio.currentTime+.2,1.5,.008);
+   break;
+ }
+}
+
+
+/* NATURAL PAPER PAGE-TURN SOUND
+   Finger lift → paper flutter → page settling
+   No musical tones or electronic beeps
+*/
+function playPageTurnSound(direction){
+ if(!romanticAudio)return;
+
+ if(romanticAudio.state==="suspended"){
+  romanticAudio.resume();
+ }
+
+ try{
+  const ctx=romanticAudio;
+  const now=ctx.currentTime;
+  const sampleRate=ctx.sampleRate;
+
+  /*
+   * Create a natural paper-rustle recording texture.
+   * Irregular small movements make it feel less synthetic.
+   */
+  function makePaperLayer(options){
+   const duration=options.duration;
+   const length=Math.floor(sampleRate*duration);
+   const buffer=ctx.createBuffer(1,length,sampleRate);
+   const data=buffer.getChannelData(0);
+
+   let lowNoise=0;
+   let midNoise=0;
+
+   const flutterPoints=[
+    .08,.14,.205,.29,.36,.445,.51,.60,.68,.76
+   ];
+
+   for(let i=0;i<length;i++){
+    const t=i/sampleRate;
+    const progress=t/duration;
+
+    const white=Math.random()*2-1;
+
+    lowNoise=lowNoise*.91+white*.09;
+    midNoise=midNoise*.56+white*.44;
+
+    let flutter=0;
+
+    for(let j=0;j<flutterPoints.length;j++){
+     const distance=Math.abs(progress-flutterPoints[j]);
+     flutter+=Math.max(0,1-distance/.045)*.22;
+    }
+
+    const attack=Math.min(1,t/.035);
+    const release=Math.min(1,(duration-t)/.16);
+
+    let movement;
+
+    if(options.kind==="lift"){
+     movement=Math.pow(Math.sin(Math.PI*Math.min(1,progress)),.7);
+    }else if(options.kind==="settle"){
+     movement=Math.exp(-progress*4.2);
+    }else{
+     movement=.52+flutter;
+    }
+
+    const texture=
+     lowNoise*.42+
+     midNoise*.58;
+
+    data[i]=texture*movement*attack*release;
+   }
+
+   const source=ctx.createBufferSource();
+   const filter=ctx.createBiquadFilter();
+   const gain=ctx.createGain();
+
+   source.buffer=buffer;
+   filter.type=options.filter||"bandpass";
+
+   const startFrequency=options.startFrequency;
+   const endFrequency=options.endFrequency;
+
+   filter.frequency.setValueAtTime(
+    startFrequency,
+    now+options.delay
+   );
+
+   filter.frequency.exponentialRampToValueAtTime(
+    endFrequency,
+    now+options.delay+duration
+   );
+
+   filter.Q.value=options.q||.65;
+
+   const start=now+options.delay;
+
+   gain.gain.setValueAtTime(.0001,start);
+   gain.gain.linearRampToValueAtTime(
+    options.volume,
+    start+.045
+   );
+   gain.gain.setValueAtTime(
+    options.volume,
+    start+duration*.45
+   );
+   gain.gain.exponentialRampToValueAtTime(
+    .0001,
+    start+duration
+   );
+
+   source.connect(filter);
+   filter.connect(gain);
+   gain.connect(ctx.destination);
+
+   source.start(start);
+   source.stop(start+duration+.025);
+  }
+
+  /*
+   * 1. The fingertip catches and lifts the edge of the page.
+   * A short, delicate dry-paper friction sound.
+   */
+  makePaperLayer({
+   kind:"lift",
+   delay:0,
+   duration:.24,
+   filter:"highpass",
+   startFrequency:2900,
+   endFrequency:1700,
+   volume:.021,
+   q:.8
+  });
+
+  /*
+   * 2. Main page movement.
+   * A broad soft paper rustle with natural flutter.
+   */
+  makePaperLayer({
+   kind:"rustle",
+   delay:.10,
+   duration:.78,
+   filter:"bandpass",
+   startFrequency:1900,
+   endFrequency:850,
+   volume:.043,
+   q:.48
+  });
+
+  /*
+   * 3. Fine paper surface texture.
+   * This gives the light papery shhh sound during the flip.
+   */
+  makePaperLayer({
+   kind:"rustle",
+   delay:.16,
+   duration:.62,
+   filter:"highpass",
+   startFrequency:4300,
+   endFrequency:2200,
+   volume:.012,
+   q:.55
+  });
+
+  /*
+   * 4. The page lands gently against the other pages.
+   * Soft low-frequency paper flap, not a hard thump.
+   */
+  makePaperLayer({
+   kind:"settle",
+   delay:.66,
+   duration:.27,
+   filter:"lowpass",
+   startFrequency:650,
+   endFrequency:230,
+   volume:.025,
+   q:.55
+  });
+
+  /*
+   * Direction changes the subtle movement character
+   * without changing the page-turn timing.
+   */
+  if(direction===-1){
+   makePaperLayer({
+    kind:"lift",
+    delay:.035,
+    duration:.19,
+    filter:"bandpass",
+    startFrequency:1500,
+    endFrequency:2300,
+    volume:.009,
+    q:.7
+   });
+  }
+
+ }catch(error){}
+}
+
+
+/* SMOOTH FALLING HEARTS DURING PAGE TURN */
+function releasePageTurnHearts(){
+ const layer=document.getElementById("pageTurnHearts");
+
+ if(!layer)return;
+
+ layer.innerHTML="";
+
+ const symbols=["♥","♡","ღ","♥","♡"];
+
+ for(let i=0;i<17;i++){
+  const heart=document.createElement("span");
+
+  heart.className="page-turn-heart";
+  heart.textContent=symbols[i%symbols.length];
+
+  heart.style.left=(5+Math.random()*90)+"%";
+
+  heart.style.setProperty(
+   "--heart-size",
+   (10+Math.random()*13)+"px"
+  );
+
+  heart.style.setProperty(
+   "--heart-duration",
+   (2.3+Math.random()*1.3)+"s"
+  );
+
+  heart.style.setProperty(
+   "--heart-drift",
+   (Math.random()*100-50)+"px"
+  );
+
+  heart.style.animationDelay=
+   (Math.random()*.45)+"s";
+
+  layer.appendChild(heart);
+ }
+
+ setTimeout(()=>{
+  layer.innerHTML="";
+ },4300);
+}
+
+
+/* MEMORY DATA */
 const memories=[
 {src:"images/IMG_9391%20(1).JPG",text:"In your smile, I found a place that feels like home. ❤️"},
 {src:"images/file_00000000c2147208aa1a05f858bed023%20(1).png",text:"With you, even the simplest moments become unforgettable. 💗"},
@@ -953,6 +1676,7 @@ const memories=[
 {src:"images/memory-08.jpg",text:"Through every season, my heart will always find its way to you. ❤️"},
 {src:"images/memory-09.jpg",text:"And if I could begin again, I would still choose you. Forever. ♡"}
 ];
+
 
 /* PRELOAD ALL 9 MEMORY PHOTOS */
 const memoryPreloads=memories.map(item=>{
@@ -1008,6 +1732,10 @@ async function showMemory(index){
 
   document.getElementById("progressText").textContent=
    "MEMORY "+String(index+1).padStart(2,"0")+" OF 09 • FOREVER US";
+
+  /* MEMORY REVEAL SOUND */
+  playRomanticSound("reveal");
+
  },130);
 }
 
@@ -1023,6 +1751,16 @@ function openBook(){
  if(bookOpened)return;
 
  bookOpened=true;
+
+ /* INITIAL USER INTERACTION UNLOCKS MOBILE AUDIO */
+ unlockRomanticAudio();
+
+ /* START CONTINUOUS ROMANTIC BACKGROUND MUSIC */
+ startAmbientMusic();
+
+ /* MAGICAL BOOK OPEN SOUND */
+ playRomanticSound("open");
+
  book.classList.add("open");
 
  document.getElementById("openPrompt").classList.add("hidden");
@@ -1033,6 +1771,7 @@ function openBook(){
   swipeGuide.classList.add("visible");
  },1900);
 }
+
 
 /* SWIPE CONTROLS */
 mainPage.addEventListener("touchstart",e=>{
@@ -1053,6 +1792,7 @@ mainPage.addEventListener("touchend",e=>{
 
 mainPage.addEventListener("pointerdown",e=>{
  if(!bookOpened||pageBusy)return;
+
  startX=e.clientX;
  startY=e.clientY;
 },{passive:true});
@@ -1082,9 +1822,16 @@ function turnPage(direction){
  if(pageBusy)return;
 
  const target=currentMemory+direction;
+
  if(target<0||target>=memories.length)return;
 
  pageBusy=true;
+
+ /* PAGE TURN AUDIO + FALLING HEARTS */
+ playPageTurnSound(direction);
+ playRomanticSound(direction===1?"next":"previous");
+ releasePageTurnHearts();
+
  flipSheet.className="flip-sheet active";
 
  if(direction===1){
@@ -1117,15 +1864,21 @@ function closeBookAndGrowTree(){
  if(!bookOpened)return;
 
  bookOpened=false;
+
+ /* PREMIUM HARDCOVER CLOSING SOUND */
+ playRomanticSound("transition");
+
  swipeGuide.classList.remove("visible");
  book.classList.remove("open");
 
  setTimeout(()=>{
   document.getElementById("bookScene").style.display="none";
   document.getElementById("treeScene").classList.add("show");
+
   setTimeout(startTree,200);
  },2400);
 }
+
 
 /* FLOATING DECORATIONS */
 function makeDecorations(){
@@ -1134,6 +1887,7 @@ function makeDecorations(){
 
  for(let i=0;i<20;i++){
   const p=document.createElement("div");
+
   p.className="petal";
   p.textContent=["♥","♡","✿"][i%3];
 
@@ -1148,17 +1902,28 @@ function makeDecorations(){
 
  for(let i=0;i<28;i++){
   const s=document.createElement("span");
+
   s.className="sparkle";
   s.textContent="✦";
   s.style.left=Math.random()*100+"%";
   s.style.top=Math.random()*100+"%";
-  s.style.setProperty("--size",(7+Math.random()*12)+"px");
-  s.style.setProperty("--duration",(2+Math.random()*4)+"s");
+
+  s.style.setProperty(
+   "--size",(7+Math.random()*12)+"px"
+  );
+
+  s.style.setProperty(
+   "--duration",(2+Math.random()*4)+"s"
+  );
+
   s.style.animationDelay=(-Math.random()*5)+"s";
+
   sparkles.appendChild(s);
  }
 }
+
 makeDecorations();
+
 
 /* HEART LEAVES */
 let heartAnimation=null;
@@ -1167,12 +1932,15 @@ let canvasWidth=0,canvasHeight=0;
 
 function makeHeartPath(ctx,x,y,size){
  ctx.beginPath();
+
  ctx.moveTo(x,y+size*.32);
+
  ctx.bezierCurveTo(
   x-size*.9,y-size*.25,
   x-size*.55,y-size*.95,
   x,y-size*.42
  );
+
  ctx.bezierCurveTo(
   x+size*.55,y-size*.95,
   x+size*.9,y-size*.25,
@@ -1194,6 +1962,7 @@ function createHeartLeaves(){
 
  canvas.width=Math.floor(canvasWidth*dpr);
  canvas.height=Math.floor(canvasHeight*dpr);
+
  ctx.setTransform(dpr,0,0,dpr,0,0);
 
  heartParticles=[];
@@ -1253,15 +2022,19 @@ function drawHeartLeaves(){
   ctx.rotate(p.rotation);
   ctx.globalAlpha=p.alpha;
   ctx.fillStyle=p.color;
+
   makeHeartPath(ctx,0,0,p.size);
+
   ctx.fill();
   ctx.restore();
  }
 }
 
+
 /* PHOTO FRUITS */
 function createFruits(){
  const layer=document.getElementById("fruitLayer");
+
  layer.innerHTML="";
 
  const positions=[
@@ -1272,18 +2045,24 @@ function createFruits(){
 
  memories.forEach((item,i)=>{
   const fruit=document.createElement("div");
+
   fruit.className="fruit";
   fruit.style.left=positions[i][0]+"%";
   fruit.style.top=positions[i][1]+"%";
 
   const img=document.createElement("img");
+
   img.src=item.src;
   img.alt="Our memory "+(i+1);
   img.loading="eager";
   img.decoding="async";
-  img.onerror=()=>{img.style.display="none"};
+
+  img.onerror=()=>{
+   img.style.display="none";
+  };
 
   const label=document.createElement("div");
+
   label.className="fruit-label";
   label.textContent="Our Memory";
 
@@ -1291,9 +2070,16 @@ function createFruits(){
   fruit.appendChild(label);
   layer.appendChild(fruit);
 
-  setTimeout(()=>fruit.classList.add("visible"),i*100);
+  setTimeout(()=>{
+   fruit.classList.add("visible");
+
+   /* INDIVIDUAL PHOTO REVEAL SOUND */
+   playRomanticSound("reveal");
+
+  },i*100);
  });
 }
+
 
 /* TREE GROWTH */
 let treeTimers=[];
@@ -1310,6 +2096,7 @@ function startTree(){
  const canvas=document.getElementById("heartCanopy");
 
  tree.classList.remove("growing","leaves-ready");
+
  void tree.offsetWidth;
 
  if(heartAnimation){
@@ -1318,21 +2105,33 @@ function startTree(){
  }
 
  heartParticles=[];
+
  document.getElementById("fruitLayer").innerHTML="";
 
  canvas.style.removeProperty("opacity");
 
  const seedling=document.querySelector(".seedling");
+
  seedling.style.animation="none";
  seedling.style.opacity="1";
+
  void seedling.offsetWidth;
+
  seedling.style.removeProperty("animation");
+
+ /* MAGICAL TREE GROWTH SOUND */
+ playRomanticSound("tree");
 
  tree.classList.add("growing");
 
  treeTimers.push(setTimeout(()=>{
   createHeartLeaves();
+
   tree.classList.add("leaves-ready");
+
+  /* HEART CANOPY SPARKLE SOUND */
+  playRomanticSound("leaves");
+
  },2500));
 
  treeTimers.push(setTimeout(()=>{
@@ -1341,11 +2140,19 @@ function startTree(){
 }
 
 function restartTree(){
+ /* RESTART SOUND */
+ playRomanticSound("restart");
+
  startTree();
 }
 
 function goStage4(){
- window.location.href="stage4.html";
+ /* ROMANTIC LETTER TRANSITION SOUND */
+ playRomanticSound("letter");
+
+ setTimeout(()=>{
+  window.location.href="stage4.html";
+ },350);
 }
 
 window.addEventListener("resize",()=>{
@@ -1355,6 +2162,7 @@ window.addEventListener("resize",()=>{
   createHeartLeaves();
  }
 });
+
 </script>
 </body>
 </html>
