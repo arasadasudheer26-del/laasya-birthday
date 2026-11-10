@@ -334,6 +334,16 @@ body{
 
 <body>
 
+<!-- AUDIO FILES: BOTH ARE INSIDE THE IMAGES FOLDER -->
+<audio id="backgroundMusic"
+ src="images/romantic-love.mp3"
+ loop
+ preload="auto"></audio>
+
+<audio id="parchmentSound"
+ src="images/royal-parchment.mp3"
+ preload="auto"></audio>
+
 <main class="page">
 
 <header class="top-heading">
@@ -483,12 +493,47 @@ const openButton=document.getElementById("openButton");
 const closeButton=document.getElementById("closeButton");
 const scrollHint=document.getElementById("scrollHint");
 
+/* AUDIO ELEMENTS */
+
+const backgroundMusic=document.getElementById("backgroundMusic");
+const parchmentSound=document.getElementById("parchmentSound");
+
+backgroundMusic.volume=0.38;
+parchmentSound.volume=0.78;
+
+/* START ROMANTIC MUSIC AFTER USER INTERACTION */
+
+function startBackgroundMusic(){
+ if(!backgroundMusic.paused)return;
+
+ backgroundMusic.play().catch(error=>{
+  console.log("Background music playback requires user interaction:",error);
+ });
+}
+
+/* PLAY REALISTIC PARCHMENT SOUND */
+
+function playParchmentSound(){
+ parchmentSound.pause();
+ parchmentSound.currentTime=0;
+
+ parchmentSound.play().catch(error=>{
+  console.log("Parchment sound playback error:",error);
+ });
+}
+
 let isOpen=false;
 
 function openScroll(){
  if(isOpen)return;
 
  isOpen=true;
+
+ // Start romantic background music
+ startBackgroundMusic();
+
+ // Play parchment unrolling sound
+ playParchmentSound();
 
  // Calculate the full natural paper height
  const fullHeight=parchment.scrollHeight;
@@ -526,6 +571,9 @@ function closeScroll(){
  if(!isOpen)return;
 
  isOpen=false;
+
+ // Play parchment rolling sound
+ playParchmentSound();
 
  paperWindow.classList.remove("open");
 
