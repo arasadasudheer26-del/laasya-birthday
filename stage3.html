@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -596,6 +595,204 @@ button{font-family:inherit}
   height:165px
  }
 }
+
+/* ==========================================
+   FINAL HEART TRANSITION — 2 SECONDS
+========================================== */
+#finalTransition{
+ position:fixed;
+ inset:0;
+ z-index:99999;
+ overflow:hidden;
+ pointer-events:none;
+ opacity:0;
+ visibility:hidden;
+ background:
+  radial-gradient(ellipse at 50% 48%,#704052 0%,#351525 58%,#100810 100%);
+ transition:opacity .12s ease,visibility .12s ease
+}
+#finalTransition.active{
+ opacity:1;
+ visibility:visible;
+ pointer-events:all
+}
+body.final-transition-active{
+ overflow:hidden!important
+}
+.final-vignette{
+ position:absolute;
+ inset:0;
+ background:radial-gradient(ellipse at center,transparent 10%,#10060b 100%);
+ opacity:.65
+}
+.final-light-rays{
+ position:absolute;
+ inset:-30%;
+ opacity:0;
+ background:repeating-conic-gradient(
+  from 0deg at 50% 50%,
+  #f7d99a00 0deg,
+  #f7d99a12 7deg,
+  #f7d99a00 14deg,
+  #f7d99a00 22deg
+ );
+ filter:blur(13px);
+ transform:scale(.7)
+}
+#finalTransition.active .final-light-rays{
+ animation:quickGoldenRays 1.8s ease-out forwards
+}
+@keyframes quickGoldenRays{
+ 0%{opacity:0;transform:scale(.65) rotate(-8deg)}
+ 45%{opacity:.45}
+ 100%{opacity:.22;transform:scale(1.2) rotate(12deg)}
+}
+#finalParticles{
+ position:absolute;
+ inset:0;
+ overflow:hidden;
+ pointer-events:none
+}
+.final-particle{
+ position:absolute;
+ left:var(--sx);
+ top:var(--sy);
+ width:var(--size);
+ height:var(--size);
+ border-radius:50%;
+ background:radial-gradient(circle,#fff2c9 0%,#eac47c 50%,#bd8750 100%);
+ box-shadow:0 0 6px #ffe5a3,0 0 12px #e9b65d;
+ opacity:0;
+ animation:finalParticleFly var(--duration) cubic-bezier(.2,.7,.2,1) forwards;
+ animation-delay:var(--delay)
+}
+@keyframes finalParticleFly{
+ 0%{opacity:0;transform:translate3d(0,0,0) scale(.4)}
+ 15%{opacity:1}
+ 100%{
+  opacity:0;
+  transform:translate3d(var(--dx),var(--dy),0) scale(.08)
+ }
+}
+.final-heart-wrap{
+ position:absolute;
+ left:50%;
+ top:46%;
+ width:min(55vw,235px);
+ aspect-ratio:1;
+ transform:translate(-50%,-50%) scale(.08);
+ opacity:0;
+ filter:drop-shadow(0 0 12px #eac47b)
+}
+#finalTransition.active .final-heart-wrap{
+ animation:quickHeartReveal 1.25s cubic-bezier(.2,.75,.25,1) .12s forwards
+}
+.final-heart-wrap svg{
+ width:100%;
+ height:100%;
+ overflow:visible
+}
+.final-heart-shape{
+ fill:url(#finalHeartGold);
+ stroke:#f9e4b4;
+ stroke-width:1.5;
+ filter:drop-shadow(0 0 8px #e8c17a)
+}
+.final-heart-glow{
+ fill:#eac47b;
+ opacity:.17;
+ filter:blur(12px)
+}
+@keyframes quickHeartReveal{
+ 0%{
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.08)
+ }
+ 55%{
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1.05)
+ }
+ 78%{
+  transform:translate(-50%,-50%) scale(.94)
+ }
+ 100%{
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1)
+ }
+}
+.final-heart-spark{
+ position:absolute;
+ color:#ffe8b0;
+ font-size:clamp(12px,3vw,21px);
+ text-shadow:0 0 9px #f9d78a;
+ opacity:0;
+ animation:quickSpark .7s ease .45s forwards
+}
+.final-heart-spark.s1{top:12%;left:16%}
+.final-heart-spark.s2{top:28%;right:8%}
+.final-heart-spark.s3{bottom:18%;left:9%}
+.final-heart-spark.s4{bottom:10%;right:17%}
+@keyframes quickSpark{
+ to{opacity:.9;transform:scale(1.2) rotate(25deg)}
+}
+.final-message{
+ position:absolute;
+ left:16px;
+ right:16px;
+ top:72%;
+ text-align:center;
+ opacity:0;
+ color:#f8e7c6;
+ text-shadow:0 2px 10px #160810;
+ z-index:5
+}
+.final-message span{
+ display:block;
+ font-size:clamp(17px,4.5vw,24px);
+ font-style:italic;
+ letter-spacing:.3px
+}
+.final-message strong{
+ display:block;
+ margin-top:7px;
+ font-family:'Great Vibes',cursive;
+ font-weight:400;
+ font-size:clamp(25px,6.5vw,36px);
+ color:#ffe1a5
+}
+#finalTransition.active .final-message{
+ animation:quickMessage .65s ease .75s forwards
+}
+@keyframes quickMessage{
+ from{opacity:0;transform:translateY(9px)}
+ to{opacity:1;transform:translateY(0)}
+}
+.final-flare{
+ position:absolute;
+ inset:-20%;
+ opacity:0;
+ pointer-events:none;
+ background:
+ radial-gradient(ellipse at center,
+  #f4dca8 0%,
+  #d8ad68 13%,
+  #a96d59 34%,
+  #54283b 58%,
+  transparent 75%);
+ transform:scale(.12)
+}
+#finalTransition.active .final-flare{
+ animation:softGoldenBloom .8s ease-in 1.05s forwards
+}
+@keyframes softGoldenBloom{
+ 0%{opacity:0;transform:scale(.12)}
+ 45%{opacity:.58;transform:scale(.8)}
+ 100%{opacity:.18;transform:scale(1.55)}
+}
+@media(max-width:390px){
+ .final-heart-wrap{width:min(62vw,220px);top:43%}
+ .final-message{top:69%}
+}
 </style>
 </head>
 
@@ -980,6 +1177,44 @@ button{font-family:inherit}
   <button class="romantic-btn" onclick="goStage4()">Continue to My Letter ♛</button>
  </div>
 </section>
+
+<!-- FINAL HEART TRANSITION OVERLAY -->
+<div id="finalTransition" aria-hidden="true">
+ <div class="final-vignette"></div>
+ <div class="final-light-rays"></div>
+ <div id="finalParticles"></div>
+
+ <div class="final-heart-wrap">
+  <svg viewBox="0 0 200 180" aria-hidden="true">
+   <defs>
+    <linearGradient id="finalHeartGold" x1="0" y1="0" x2="1" y2="1">
+     <stop offset="0" stop-color="#fff4c9"/>
+     <stop offset=".35" stop-color="#f5d58e"/>
+     <stop offset=".7" stop-color="#d69b51"/>
+     <stop offset="1" stop-color="#9b593d"/>
+    </linearGradient>
+   </defs>
+
+   <path class="final-heart-glow"
+    d="M100 169 C80 149 10 103 10 52 C10 7 67 -5 100 35 C133 -5 190 7 190 52 C190 103 120 149 100 169Z"/>
+
+   <path class="final-heart-shape"
+    d="M100 169 C80 149 10 103 10 52 C10 7 67 -5 100 35 C133 -5 190 7 190 52 C190 103 120 149 100 169Z"/>
+  </svg>
+
+  <span class="final-heart-spark s1">✦</span>
+  <span class="final-heart-spark s2">✧</span>
+  <span class="final-heart-spark s3">✦</span>
+  <span class="final-heart-spark s4">✧</span>
+ </div>
+
+ <div class="final-message">
+  <span>Every memory brought me closer to you…</span>
+  <strong>And now, my heart has one last thing to tell you.</strong>
+ </div>
+
+ <div class="final-flare"></div>
+</div>
 
 
 <script>
@@ -1945,13 +2180,175 @@ function restartTree(){
  startTree();
 }
 
+
+/* ==========================================
+   FINAL TRANSITION — EXACTLY 2 SECONDS
+   Triggered only by Continue to My Letter.
+========================================== */
+
+let stage4TransitionStarted=false;
+
 function goStage4(){
+ if(stage4TransitionStarted)return;
+
+ stage4TransitionStarted=true;
+
+ const overlay=document.getElementById("finalTransition");
+ const particleLayer=document.getElementById("finalParticles");
+ const tree=document.getElementById("treeScene");
+ const canopy=document.getElementById("heartCanopy");
+
+ const fruits=document.querySelectorAll(".fruit");
+ const treeSvg=document.querySelector(".tree-svg");
+ const continueButton=document.querySelector(".tree-actions button:last-child");
+
+ if(continueButton){
+  continueButton.disabled=true;
+  continueButton.style.opacity=".55";
+  continueButton.style.pointerEvents="none";
+ }
+
  playRomanticSound("letter");
 
+ if(!overlay||!particleLayer){
+  window.location.href="stage4.html";
+  return;
+ }
+
+ document.body.classList.add("final-transition-active");
+
+ overlay.classList.add("active");
+ overlay.setAttribute("aria-hidden","false");
+
+ tree.style.pointerEvents="none";
+
+ /* FRUITS DISSOLVE INTO GOLDEN PARTICLES */
+ fruits.forEach((fruit,index)=>{
+  const rect=fruit.getBoundingClientRect();
+
+  const originX=rect.left+rect.width/2;
+  const originY=rect.top+rect.height/2;
+
+  fruit.style.transition=
+   "opacity .45s ease,transform .55s ease,filter .45s ease";
+
+  fruit.style.opacity="0";
+  fruit.style.transform="scale(.2) rotate(12deg)";
+  fruit.style.filter="brightness(1.8) blur(3px)";
+
+  for(let i=0;i<5;i++){
+   const particle=document.createElement("span");
+
+   particle.className="final-particle";
+
+   const angle=Math.random()*Math.PI*2;
+   const distance=45+Math.random()*105;
+
+   particle.style.setProperty("--sx",originX+"px");
+   particle.style.setProperty("--sy",originY+"px");
+
+   particle.style.setProperty(
+    "--dx",
+    Math.cos(angle)*distance+"px"
+   );
+
+   particle.style.setProperty(
+    "--dy",
+    (Math.sin(angle)*distance-35)+"px"
+   );
+
+   particle.style.setProperty(
+    "--size",
+    (2+Math.random()*4)+"px"
+   );
+
+   particle.style.setProperty(
+    "--duration",
+    (1+Math.random()*.45)+"s"
+   );
+
+   particle.style.setProperty(
+    "--delay",
+    (index*.025+Math.random()*.08)+"s"
+   );
+
+   particleLayer.appendChild(particle);
+  }
+ });
+
+ /* HEART CANOPY PARTICLES MOVE TOWARDS ONE CENTRAL HEART */
+ const canopyRect=canopy.getBoundingClientRect();
+
+ const centreX=window.innerWidth/2;
+ const centreY=window.innerHeight*.43;
+
+ for(let i=0;i<55;i++){
+  const particle=document.createElement("span");
+
+  particle.className="final-particle";
+
+  const startX=canopyRect.left+Math.random()*canopyRect.width;
+  const startY=canopyRect.top+Math.random()*canopyRect.height*.72;
+
+  particle.style.setProperty("--sx",startX+"px");
+  particle.style.setProperty("--sy",startY+"px");
+
+  particle.style.setProperty(
+   "--dx",
+   (centreX-startX)+"px"
+  );
+
+  particle.style.setProperty(
+   "--dy",
+   (centreY-startY)+"px"
+  );
+
+  particle.style.setProperty(
+   "--size",
+   (2+Math.random()*4)+"px"
+  );
+
+  particle.style.setProperty(
+   "--duration",
+   (1.05+Math.random()*.4)+"s"
+  );
+
+  particle.style.setProperty(
+   "--delay",
+   (Math.random()*.15)+"s"
+  );
+
+  particleLayer.appendChild(particle);
+ }
+
+ /* TREE AND HEART CANOPY QUICKLY DISSOLVE */
+ canopy.style.transition="opacity .55s ease";
+ canopy.style.opacity="0";
+
+ if(treeSvg){
+  treeSvg.style.transition="opacity .55s ease,filter .55s ease";
+  treeSvg.style.opacity="0";
+  treeSvg.style.filter="brightness(1.7)";
+ }
+
+ const seedling=document.querySelector(".seedling");
+
+ if(seedling){
+  seedling.style.transition="opacity .4s ease";
+  seedling.style.opacity="0";
+ }
+
+ document.querySelectorAll(".tree-actions button").forEach(button=>{
+  button.disabled=true;
+  button.style.pointerEvents="none";
+ });
+
+ /* OPEN STAGE 4 AFTER THE 2-SECOND HEART TRANSITION */
  setTimeout(()=>{
   window.location.href="stage4.html";
- },350);
+ },2000);
 }
+
 
 window.addEventListener("resize",()=>{
  const tree=document.getElementById("treeScene");
