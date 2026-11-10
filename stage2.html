@@ -230,6 +230,11 @@ footer{margin-top:35px;color:#d8b6bf;font-size:17px}
  <source src="./husband-wish.wav" type="audio/wav">
 </audio>
 
+<!-- STAGE 2 BACKGROUND MUSIC -->
+<audio id="treeGrowMusic" preload="auto" loop>
+ <source src="./images/tree-grow.mp3" type="audio/mpeg">
+</audio>
+
 <script>
 (()=>{
 "use strict";
@@ -247,6 +252,22 @@ const playVoice=$("playVoice");
 const continueVoice=$("continueVoice");
 const micButton=$("micButton");
 const entryScreen=$("entryScreen");
+
+/* STAGE 2 BACKGROUND MUSIC CONTROL */
+const treeGrowMusic=$("treeGrowMusic");
+treeGrowMusic.volume=0.25;
+
+function startTreeGrowMusic(){
+ treeGrowMusic.currentTime=0;
+ treeGrowMusic.play().catch(()=>{
+  statusText.textContent="Background music could not start. Please check tree-grow.mp3.";
+ });
+}
+
+function stopTreeGrowMusic(){
+ treeGrowMusic.pause();
+ treeGrowMusic.currentTime=0;
+}
 
 let assembled=false,candlesBlown=false,cakeCut=false;
 let stream=null,audioContext=null,analyser=null,micTimer=null;
@@ -562,6 +583,9 @@ function startCelebration(){
  celebrationStarted=true;
  initSound();
 
+ /* Start Stage 2 background music */
+ startTreeGrowMusic();
+
  entryScreen.classList.add("dismissed");
  statusText.textContent="Your royal birthday cake is being prepared... ❤️";
 
@@ -794,13 +818,15 @@ continueVoice.addEventListener("click",()=>{
 
 /* Stage 3 navigation */
 $("nextButton").addEventListener("click",()=>{
+ stopTreeGrowMusic();
  window.location.href="./stage3.html";
 });
 
-/* Clean up microphone and voice recording */
+/* Clean up microphone, voice recording and background music */
 window.addEventListener("pagehide",()=>{
  stopMic();
  audio.pause();
+ stopTreeGrowMusic();
 });
 })();
 </script>
