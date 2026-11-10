@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,6 +58,65 @@ h1{font-family:'Great Vibes',cursive;font-size:clamp(52px,12vw,78px);font-weight
 .cake-stage.cut .cake-half.right{transform:translateX(55px) rotate(2deg)}
 .cake-stage.cut .tier{filter:brightness(1.04)}
 .cake-stage.cut .plate{box-shadow:0 10px 18px #0009}
+
+/* Cake stays centered and disappears without moving or inflating */
+.cake-stage.exploding .cake-half.left,
+.cake-stage.exploding .cake-half.right{
+ transform:none!important;
+ transition:none!important;
+}
+.cake-stage.exploding .cake-visual{
+ animation:cakeBombDisappear .24s ease-out forwards;
+}
+@keyframes cakeBombDisappear{
+ from{opacity:1}
+ to{opacity:0}
+}
+
+/* Heart and golden sprinkle explosion */
+.heart-burst-layer{
+ position:fixed;
+ inset:0;
+ z-index:900;
+ overflow:hidden;
+ pointer-events:none;
+}
+.heart-burst-piece{
+ position:fixed;
+ left:var(--start-x);
+ top:var(--start-y);
+ opacity:0;
+ font-size:var(--size);
+ line-height:1;
+ transform:translate3d(0,0,0) scale(.25) rotate(0deg);
+ animation:heartBombBurst var(--duration) cubic-bezier(.12,.68,.18,1) var(--delay) forwards;
+ will-change:transform,opacity;
+}
+@keyframes heartBombBurst{
+ 0%{opacity:0;transform:translate3d(0,0,0) scale(.2) rotate(0deg)}
+ 7%{opacity:1}
+ 25%{opacity:1}
+ 100%{opacity:0;transform:translate3d(var(--move-x),var(--move-y),0) scale(var(--end-scale)) rotate(var(--spin))}
+}
+.gold-burst-piece{
+ position:fixed;
+ left:var(--start-x);
+ top:var(--start-y);
+ width:var(--size);
+ height:var(--size);
+ border-radius:50%;
+ opacity:0;
+ background:radial-gradient(circle at 35% 30%,#fff9d8,#f8d47c 45%,#bd803b 100%);
+ box-shadow:0 0 7px #ffdf91aa;
+ animation:goldBombBurst var(--duration) cubic-bezier(.12,.68,.18,1) var(--delay) forwards;
+ will-change:transform,opacity;
+}
+@keyframes goldBombBurst{
+ 0%{opacity:0;transform:translate3d(0,0,0) scale(.2)}
+ 8%{opacity:1}
+ 35%{opacity:1}
+ 100%{opacity:0;transform:translate3d(var(--move-x),var(--move-y),0) scale(.1)}
+}
 
 .knife{position:absolute;z-index:12;top:12px;left:50%;width:7px;height:0;opacity:0;transform:translateX(-50%);border-radius:4px;background:linear-gradient(90deg,#777,#fff,#aaa);box-shadow:0 0 8px #fff9}
 .knife:before{content:"";position:absolute;top:-22px;left:-5px;width:17px;height:24px;border-radius:5px 5px 2px 2px;background:linear-gradient(90deg,#5b2634,#d9a15e,#5b2634)}
@@ -220,7 +280,6 @@ footer{margin-top:35px;color:#d8b6bf;font-size:17px}
   <p>Every dream of yours is a dream I want to see come true. Here's to us and our forever! ❤️</p>
   <p style="color:#f7d99c;font-size:25px">I Love You, My Pellama!</p>
  </div>
- <button class="royal-btn" id="nextButton">♛ Enter Our Memory World ♛</button>
 </div>
 
 <footer>Every little moment is special when it is with you. ❤️</footer>
@@ -273,6 +332,7 @@ let assembled=false,candlesBlown=false,cakeCut=false;
 let stream=null,audioContext=null,analyser=null,micTimer=null;
 let soundReady=false,celebrationStarted=false;
 let masterGain=null,compressor=null;
+let transitionStarted=false;
 
 const SOUND_VOLUME=0.88;
 
@@ -380,7 +440,7 @@ function noiseSweep(duration=.8,volume=.3,reverse=false){
 
  source.buffer=buffer;
  filter.type="lowpass";
- filter.frequency.setValueAtTime(reverse?180:500,duration? t:t);
+ filter.frequency.setValueAtTime(reverse?180:500,t);
  filter.frequency.exponentialRampToValueAtTime(reverse?900:7500,t+duration);
 
  gain.gain.setValueAtTime(.0001,t);
@@ -466,6 +526,22 @@ function soundCakeSplit(){
  sparkleChime();
 }
 
+/* BOMB-STYLE HEART EXPLOSION SOUND */
+function soundBombExplosion(){
+ if(!soundReady)return;
+
+ bassImpact(1.65);
+ noiseSweep(.72,.62);
+ tone(92,.01,.55,.22,"sawtooth",34);
+ tone(155,.035,.38,.12,"sine",48);
+
+ setTimeout(()=>{
+  tone(880,.02,.65,.055,"sine");
+  tone(1175,.12,.8,.045,"sine");
+  tone(1568,.22,.9,.035,"triangle");
+ },160);
+}
+
 /* SOFT ROMANTIC CELEBRATION MUSIC */
 function soundFinale(){
  if(!soundReady)return;
@@ -473,7 +549,6 @@ function soundFinale(){
  const ctx=audioContext;
  const start=ctx.currentTime+.15;
 
- /* Gentle note with a soft piano-like envelope */
  function romanticNote(freq,when,duration,volume){
   const osc=ctx.createOscillator();
   const gain=ctx.createGain();
@@ -499,7 +574,6 @@ function soundFinale(){
   osc.stop(when+duration+.05);
  }
 
- /* Warm sustained string-like chords */
  function romanticPad(notes,when,duration,volume){
   notes.forEach((freq,index)=>{
    const osc=ctx.createOscillator();
@@ -529,7 +603,6 @@ function soundFinale(){
   });
  }
 
- /* Soft romantic chord progression */
  const chords=[
   {notes:[261.63,329.63,392],bass:130.81},
   {notes:[220,261.63,329.63],bass:110},
@@ -545,7 +618,6 @@ function soundFinale(){
   romanticNote(chord.bass,when,2.8,.035);
  });
 
- /* A gentle piano-inspired melody */
  const melody=[
   [523.25,0,.9],
   [587.33,.75,.8],
@@ -565,13 +637,11 @@ function soundFinale(){
  melody.forEach(([freq,offset,duration],index)=>{
   romanticNote(freq,start+offset,duration,.075);
 
-  /* Very subtle upper harmonic for a delicate piano-like sparkle */
   if(index===2||index===8||index===12){
    romanticNote(freq*2,start+offset+.035,duration*.65,.009);
   }
  });
 
- /* Soft high bell accents, not loud or sharp */
  [783.99,659.25,587.33].forEach((freq,index)=>{
   romanticNote(freq,start+1.6+index*4.2,1.8,.018);
  });
@@ -583,7 +653,6 @@ function startCelebration(){
  celebrationStarted=true;
  initSound();
 
- /* Start Stage 2 background music */
  startTreeGrowMusic();
 
  entryScreen.classList.add("dismissed");
@@ -632,6 +701,84 @@ function particles(){
   setTimeout(()=>p.remove(),7500);
   if(++n>=55)clearInterval(t);
  },130);
+}
+
+/* Heart pieces and gold particles burst from the cake's exact center */
+function createHeartBombExplosion(){
+ const layer=document.createElement("div");
+ layer.className="heart-burst-layer";
+ document.body.appendChild(layer);
+
+ const rect=cakeStage.getBoundingClientRect();
+ const originX=rect.left+rect.width/2;
+ const originY=rect.top+rect.height/2;
+
+ const hearts=["❤️","💖","💕","💗","💓","💞","♥"];
+ const totalHearts=90;
+
+ for(let i=0;i<totalHearts;i++){
+  const angle=(Math.PI*2/totalHearts)*i+(Math.random()-.5)*.16;
+  const distance=130+Math.random()*Math.max(window.innerWidth,window.innerHeight)*.72;
+
+  const heart=document.createElement("span");
+  heart.className="heart-burst-piece";
+  heart.textContent=hearts[Math.floor(Math.random()*hearts.length)];
+
+  heart.style.setProperty("--start-x",originX+"px");
+  heart.style.setProperty("--start-y",originY+"px");
+  heart.style.setProperty("--move-x",Math.cos(angle)*distance+"px");
+  heart.style.setProperty("--move-y",Math.sin(angle)*distance+"px");
+  heart.style.setProperty("--size",(13+Math.random()*23)+"px");
+  heart.style.setProperty("--duration",(1.15+Math.random()*.85)+"s");
+  heart.style.setProperty("--delay",(Math.random()*.12)+"s");
+  heart.style.setProperty("--spin",(Math.random()*900-450)+"deg");
+  heart.style.setProperty("--end-scale",(0.45+Math.random()*.8).toFixed(2));
+
+  layer.appendChild(heart);
+ }
+
+ const totalGold=105;
+
+ for(let i=0;i<totalGold;i++){
+  const angle=Math.random()*Math.PI*2;
+  const distance=100+Math.random()*Math.max(window.innerWidth,window.innerHeight)*.78;
+
+  const gold=document.createElement("span");
+  gold.className="gold-burst-piece";
+
+  gold.style.setProperty("--start-x",originX+"px");
+  gold.style.setProperty("--start-y",originY+"px");
+  gold.style.setProperty("--move-x",Math.cos(angle)*distance+"px");
+  gold.style.setProperty("--move-y",Math.sin(angle)*distance+"px");
+  gold.style.setProperty("--size",(2+Math.random()*5)+"px");
+  gold.style.setProperty("--duration",(1+Math.random()*1.1)+"s");
+  gold.style.setProperty("--delay",(Math.random()*.16)+"s");
+
+  layer.appendChild(gold);
+ }
+
+ setTimeout(()=>layer.remove(),2600);
+}
+
+/* Automatic Stage 3 transition after the heart explosion */
+function beginCakeBombTransition(){
+ if(transitionStarted)return;
+ transitionStarted=true;
+
+ statusText.textContent="A thousand hearts, all for you... ❤️";
+
+ createHeartBombExplosion();
+
+ cakeStage.classList.add("exploding");
+
+ soundBombExplosion();
+ soundFinale();
+
+ /* Let the heart explosion finish before opening Stage 3 */
+ setTimeout(()=>{
+  stopTreeGrowMusic();
+  window.location.href="./stage3.html";
+ },2050);
 }
 
 function stopMic(){
@@ -797,15 +944,13 @@ function startCakeCutting(){
   setTimeout(()=>{
    cakeStage.classList.add("cut");
    soundCakeSplit();
-  },850);
 
-  setTimeout(()=>{
-   voiceStage.classList.add("hidden");
-   afterCut.classList.remove("hidden");
-   statusText.textContent="Our cake is cut! Let the celebration begin! 🎉";
-   particles();
-   soundFinale();
-  },2500);
+   /* A short pause after the cut, then the sudden bomb-style burst */
+   setTimeout(()=>{
+    beginCakeBombTransition();
+   },600);
+
+  },850);
 
  },1400);
 }
@@ -814,12 +959,6 @@ audio.addEventListener("ended",startCakeCutting);
 
 continueVoice.addEventListener("click",()=>{
  if(!cakeCut)startCakeCutting();
-});
-
-/* Stage 3 navigation */
-$("nextButton").addEventListener("click",()=>{
- stopTreeGrowMusic();
- window.location.href="./stage3.html";
 });
 
 /* Clean up microphone, voice recording and background music */
