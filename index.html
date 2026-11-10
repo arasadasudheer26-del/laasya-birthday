@@ -216,7 +216,7 @@ body{background:#160914;color:white;font-family:'Cormorant Garamond',serif}
  border-bottom:7px solid transparent;
 }
 
-/* BALLOON BURST */
+/* ORIGINAL BALLOON BURST */
 .scene.hit .balloon-wrap{animation:balloonBurst .48s ease-in forwards}
 @keyframes balloonBurst{
  0%{transform:translate(-50%,-50%) scale(1)}
@@ -266,6 +266,295 @@ body{background:#160914;color:white;font-family:'Cormorant Garamond',serif}
  color:#f7dce7;font-size:16px;letter-spacing:1px;z-index:4;
 }
 
+/* ==========================================
+   CONTINUOUS PREMIUM BURST TRANSITION
+   Starts at the exact balloon impact position
+========================================== */
+
+.burst-transition{
+ position:absolute;
+ inset:0;
+ z-index:25;
+ overflow:hidden;
+ pointer-events:none;
+ opacity:0;
+ visibility:hidden;
+ --burst-x:50%;
+ --burst-y:35%;
+}
+
+.scene.transitioning .burst-transition{
+ visibility:visible;
+ opacity:1;
+}
+
+/* Expanding rose-gold light from balloon impact */
+.burst-light{
+ position:absolute;
+ left:var(--burst-x);
+ top:var(--burst-y);
+ width:20px;
+ height:20px;
+ border-radius:50%;
+ transform:translate(-50%,-50%) scale(.1);
+ opacity:0;
+ background:radial-gradient(circle,
+  #fff8e9 0%,
+  #ffe2bd 8%,
+  #ffb9d5 20%,
+  #ec6e9d 38%,
+  #9e3b6c 57%,
+  transparent 72%);
+ filter:blur(2px);
+}
+
+.scene.transitioning .burst-light{
+ animation:burstLightExpand 1.35s cubic-bezier(.16,.68,.25,1) forwards;
+}
+
+@keyframes burstLightExpand{
+ 0%{
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.1);
+ }
+ 12%{opacity:1}
+ 45%{
+  opacity:.95;
+  transform:translate(-50%,-50%) scale(16);
+ }
+ 100%{
+  opacity:.9;
+  transform:translate(-50%,-50%) scale(75);
+ }
+}
+
+/* Golden shockwave rings */
+.burst-ring{
+ position:absolute;
+ left:var(--burst-x);
+ top:var(--burst-y);
+ width:45px;
+ height:45px;
+ border:1px solid #ffe5b9;
+ border-radius:50%;
+ transform:translate(-50%,-50%) scale(.2);
+ opacity:0;
+ box-shadow:0 0 12px #f4c47a55,inset 0 0 10px #f4c47a22;
+}
+
+.burst-ring.ring-two{
+ width:65px;
+ height:65px;
+ border-color:#ffc5d9;
+}
+
+.burst-ring.ring-three{
+ width:85px;
+ height:85px;
+ border-color:#e9bb83;
+}
+
+.scene.transitioning .burst-ring.ring-one{
+ animation:shockwave 1.05s cubic-bezier(.1,.65,.2,1) forwards;
+}
+.scene.transitioning .burst-ring.ring-two{
+ animation:shockwave 1.2s cubic-bezier(.1,.65,.2,1) .12s forwards;
+}
+.scene.transitioning .burst-ring.ring-three{
+ animation:shockwave 1.3s cubic-bezier(.1,.65,.2,1) .22s forwards;
+}
+
+@keyframes shockwave{
+ 0%{
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.2);
+ }
+ 15%{opacity:.95}
+ 70%{opacity:.65}
+ 100%{
+  opacity:0;
+  transform:translate(-50%,-50%) scale(20);
+ }
+}
+
+/* Heart-shaped light fragments continue the balloon burst */
+.transition-heart{
+ position:absolute;
+ left:var(--burst-x);
+ top:var(--burst-y);
+ color:#ffe4ed;
+ font-size:var(--size,18px);
+ text-shadow:0 0 8px #ff8dbb,0 0 18px #e7b16c;
+ opacity:0;
+ transform:translate(-50%,-50%) scale(.3);
+}
+
+.scene.transitioning .transition-heart{
+ animation:heartFragmentFly 1.25s cubic-bezier(.15,.65,.25,1) forwards;
+}
+
+@keyframes heartFragmentFly{
+ 0%{
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.2) rotate(0deg);
+ }
+ 12%{opacity:1}
+ 75%{opacity:.9}
+ 100%{
+  opacity:0;
+  transform:
+   translate(
+    calc(-50% + var(--hx)),
+    calc(-50% + var(--hy))
+   )
+   scale(1.3)
+   rotate(var(--hr));
+ }
+}
+
+/* Rose-gold petals */
+.transition-petal{
+ position:absolute;
+ left:var(--burst-x);
+ top:var(--burst-y);
+ width:12px;
+ height:19px;
+ border-radius:90% 10% 90% 10%;
+ background:linear-gradient(145deg,#fff0cf,#e6b36f 48%,#c86a87);
+ box-shadow:0 0 10px #e6ae8a77;
+ opacity:0;
+}
+
+.scene.transitioning .transition-petal{
+ animation:rosePetalBurst 1.25s ease-out forwards;
+}
+
+@keyframes rosePetalBurst{
+ 0%{
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.2) rotate(0);
+ }
+ 15%{opacity:1}
+ 100%{
+  opacity:0;
+  transform:
+   translate(
+    calc(-50% + var(--px)),
+    calc(-50% + var(--py))
+   )
+   rotate(var(--pr))
+   scale(.5);
+ }
+}
+
+/* Fine golden dust */
+.transition-dust{
+ position:absolute;
+ left:var(--burst-x);
+ top:var(--burst-y);
+ width:4px;
+ height:4px;
+ border-radius:50%;
+ background:#fff0c7;
+ box-shadow:0 0 9px 3px #eac18b;
+ opacity:0;
+}
+
+.scene.transitioning .transition-dust{
+ animation:dustBurst 1.25s ease-out forwards;
+}
+
+@keyframes dustBurst{
+ 0%{
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.2);
+ }
+ 20%{opacity:1}
+ 100%{
+  opacity:0;
+  transform:
+   translate(
+    calc(-50% + var(--dx)),
+    calc(-50% + var(--dy))
+   )
+   scale(.3);
+ }
+}
+
+/* A delicate message appears inside the burst */
+.burst-caption{
+ position:absolute;
+ left:0;
+ top:calc(var(--burst-y) + 100px);
+ width:100%;
+ padding:0 15px;
+ text-align:center;
+ opacity:0;
+ transform:translateY(12px);
+}
+
+.burst-caption span{
+ display:block;
+ font-family:'Great Vibes',cursive;
+ font-size:clamp(27px,7vw,40px);
+ color:#ffe8d8;
+ text-shadow:0 0 18px #ff9fbd99,0 2px 8px #190b16;
+}
+
+.burst-caption small{
+ display:block;
+ margin-top:8px;
+ color:#f1d2a6;
+ font-size:9px;
+ letter-spacing:3px;
+ text-transform:uppercase;
+}
+
+.scene.transitioning .burst-caption{
+ animation:burstCaptionReveal .75s ease-out .3s forwards;
+}
+
+@keyframes burstCaptionReveal{
+ to{opacity:1;transform:translateY(0)}
+}
+
+/* Soft cinematic veil at the end */
+.burst-veil{
+ position:absolute;
+ inset:0;
+ opacity:0;
+ background:radial-gradient(ellipse at var(--burst-x) var(--burst-y),
+  #4a1c36 0%,
+  #211020 48%,
+  #100711 100%);
+}
+
+.scene.transitioning .burst-veil{
+ animation:burstVeil 1.25s ease-in forwards;
+}
+
+@keyframes burstVeil{
+ 0%{opacity:0}
+ 45%{opacity:.12}
+ 100%{opacity:1}
+}
+
+/* Background gently disappears into the burst */
+.scene.transitioning .heading,
+.scene.transitioning .archer,
+.scene.transitioning .tap-label,
+.scene.transitioning .instruction{
+ transition:opacity .8s ease,filter .8s ease;
+ opacity:0;
+ filter:blur(5px);
+}
+
+.scene.transitioning .ambient,
+.scene.transitioning .stars{
+ transition:opacity .8s ease;
+ opacity:.15;
+}
+
 /* MOBILE */
 @media(max-width:600px){
  .heading{top:6%}
@@ -284,6 +573,8 @@ body{background:#160914;color:white;font-family:'Cormorant Garamond',serif}
 
  .tap-label{bottom:calc(7% + 235px);font-size:9px}
  .instruction{bottom:2%;font-size:14px}
+ .burst-caption{top:calc(var(--burst-y) + 85px)}
+ .burst-caption small{font-size:8px;letter-spacing:2px}
 }
 
 /* SHORT SCREENS */
@@ -301,6 +592,7 @@ body{background:#160914;color:white;font-family:'Cormorant Garamond',serif}
 
  .tap-label{bottom:calc(5% + 185px)}
  .instruction{font-size:12px;bottom:1%}
+ .burst-caption{top:calc(var(--burst-y) + 75px)}
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -431,6 +723,26 @@ body{background:#160914;color:white;font-family:'Cormorant Garamond',serif}
 
  <div class="flying-arrow" id="flyingArrow"></div>
  <div class="flash"></div>
+
+ <!-- CONTINUOUS BURST TRANSITION LAYER -->
+ <div class="burst-transition" id="burstTransition">
+
+  <div class="burst-light"></div>
+
+  <div class="burst-ring ring-one"></div>
+  <div class="burst-ring ring-two"></div>
+  <div class="burst-ring ring-three"></div>
+
+  <div class="burst-particles" id="burstParticles"></div>
+
+  <div class="burst-caption">
+   <span>And our forever begins...</span>
+   <small>One heart · One beautiful story</small>
+  </div>
+
+  <div class="burst-veil"></div>
+
+ </div>
 </div>
 
 <script>
@@ -439,6 +751,8 @@ const archer=document.getElementById("archer");
 const balloon=document.getElementById("balloon");
 const flyingArrow=document.getElementById("flyingArrow");
 const instruction=document.getElementById("instruction");
+const burstTransition=document.getElementById("burstTransition");
+const burstParticles=document.getElementById("burstParticles");
 
 let started=false;
 
@@ -618,6 +932,86 @@ function playRevealChime(){
  }catch(e){}
 }
 
+/* AUDIO: PREMIUM BURST TRANSITION SOUND */
+function playPremiumBurstSound(){
+ const ctx=getSoundContext();
+ if(!ctx)return;
+
+ try{
+  const now=ctx.currentTime;
+
+  /* Deep, soft cinematic impact */
+  const impact=ctx.createOscillator();
+  const impactGain=ctx.createGain();
+
+  impact.type="sine";
+  impact.frequency.setValueAtTime(180,now);
+  impact.frequency.exponentialRampToValueAtTime(65,now+.55);
+
+  impactGain.gain.setValueAtTime(.001,now);
+  impactGain.gain.linearRampToValueAtTime(.11,now+.045);
+  impactGain.gain.exponentialRampToValueAtTime(.001,now+.65);
+
+  impact.connect(impactGain);
+  impactGain.connect(ctx.destination);
+
+  impact.start(now);
+  impact.stop(now+.67);
+
+  /* Soft airy expansion */
+  const duration=1.1;
+  const size=Math.floor(ctx.sampleRate*duration);
+  const buffer=ctx.createBuffer(1,size,ctx.sampleRate);
+  const data=buffer.getChannelData(0);
+
+  for(let i=0;i<size;i++){
+   const progress=i/size;
+   const envelope=Math.sin(Math.PI*progress);
+   data[i]=(Math.random()*2-1)*envelope;
+  }
+
+  const noise=ctx.createBufferSource();
+  const filter=ctx.createBiquadFilter();
+  const gain=ctx.createGain();
+
+  noise.buffer=buffer;
+  filter.type="lowpass";
+  filter.frequency.setValueAtTime(350,now);
+  filter.frequency.exponentialRampToValueAtTime(1900,now+.5);
+  filter.frequency.exponentialRampToValueAtTime(500,now+1.05);
+
+  gain.gain.setValueAtTime(.001,now);
+  gain.gain.linearRampToValueAtTime(.05,now+.3);
+  gain.gain.exponentialRampToValueAtTime(.001,now+1.08);
+
+  noise.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+
+  noise.start(now);
+  noise.stop(now+1.1);
+
+  /* Delicate rose-gold bell */
+  const bell=ctx.createOscillator();
+  const bellGain=ctx.createGain();
+
+  bell.type="sine";
+  bell.frequency.setValueAtTime(784,now+.18);
+  bell.frequency.exponentialRampToValueAtTime(1174,now+.55);
+
+  bellGain.gain.setValueAtTime(.001,now+.18);
+  bellGain.gain.linearRampToValueAtTime(.04,now+.25);
+  bellGain.gain.exponentialRampToValueAtTime(.001,now+1.05);
+
+  bell.connect(bellGain);
+  bellGain.connect(ctx.destination);
+
+  bell.start(now+.18);
+  bell.stop(now+1.08);
+
+ }catch(e){}
+}
+
 /* STARS */
 const stars=document.getElementById("stars");
 
@@ -689,13 +1083,9 @@ function launchArrow(){
  const angle=Math.atan2(dy,dx)*180/Math.PI;
  const radians=Math.atan2(dy,dx);
 
- // Keep the arrow at its original fixed size.
  const arrowWidth=52;
-
- // Full distance from arrow origin to arrow tip.
  const tipLength=83;
 
- // Position the arrow so its tip reaches the balloon center.
  const endX=targetX-Math.cos(radians)*tipLength;
  const endY=targetY-Math.sin(radians)*tipLength;
 
@@ -723,6 +1113,94 @@ function launchArrow(){
   easing:"cubic-bezier(.18,.72,.32,1)",
   fill:"forwards"
  });
+}
+
+/* CREATE PREMIUM BURST PARTICLES */
+function createPremiumBurstParticles(){
+ burstParticles.innerHTML="";
+
+ const symbols=["♥","♡","✦","✧","❤"];
+
+ /* Floating hearts */
+ for(let i=0;i<18;i++){
+  const heart=document.createElement("span");
+  heart.className="transition-heart";
+  heart.textContent=symbols[i%symbols.length];
+
+  const angle=(Math.PI*2*i)/18;
+  const distance=100+Math.random()*220;
+
+  heart.style.setProperty("--hx",Math.cos(angle)*distance+"px");
+  heart.style.setProperty("--hy",Math.sin(angle)*distance+"px");
+  heart.style.setProperty("--hr",(Math.random()*150-75)+"deg");
+  heart.style.setProperty("--size",(13+Math.random()*15)+"px");
+  heart.style.animationDelay=(Math.random()*.15)+"s";
+
+  burstParticles.appendChild(heart);
+ }
+
+ /* Rose-gold petals */
+ for(let i=0;i<16;i++){
+  const petal=document.createElement("span");
+  petal.className="transition-petal";
+
+  const angle=(Math.PI*2*i)/16;
+  const distance=120+Math.random()*260;
+
+  petal.style.setProperty("--px",Math.cos(angle)*distance+"px");
+  petal.style.setProperty("--py",Math.sin(angle)*distance+"px");
+  petal.style.setProperty("--pr",(Math.random()*720-360)+"deg");
+  petal.style.animationDelay=(Math.random()*.2)+"s";
+
+  burstParticles.appendChild(petal);
+ }
+
+ /* Fine golden dust */
+ for(let i=0;i<28;i++){
+  const dust=document.createElement("span");
+  dust.className="transition-dust";
+
+  const angle=Math.random()*Math.PI*2;
+  const distance=100+Math.random()*330;
+
+  dust.style.setProperty("--dx",Math.cos(angle)*distance+"px");
+  dust.style.setProperty("--dy",Math.sin(angle)*distance+"px");
+  dust.style.animationDelay=(Math.random()*.2)+"s";
+
+  burstParticles.appendChild(dust);
+ }
+}
+
+/* START BURST-TO-STAGE TRANSITION */
+function beginBurstTransition(){
+ if(!started)return;
+
+ const sceneRect=scene.getBoundingClientRect();
+ const balloonRect=balloon.getBoundingClientRect();
+
+ /* Use the actual balloon impact position */
+ const centerX=balloonRect.left-sceneRect.left+balloonRect.width/2;
+ const centerY=balloonRect.top-sceneRect.top+balloonRect.height/2;
+
+ const x=(centerX/sceneRect.width)*100;
+ const y=(centerY/sceneRect.height)*100;
+
+ burstTransition.style.setProperty("--burst-x",x+"%");
+ burstTransition.style.setProperty("--burst-y",y+"%");
+
+ createPremiumBurstParticles();
+
+ /* Continue directly from the original balloon burst */
+ scene.classList.add("transitioning");
+
+ instruction.textContent="And our forever begins... ❤️";
+
+ playPremiumBurstSound();
+
+ /* Move to Stage 2 after the burst has filled the screen */
+ setTimeout(()=>{
+  window.location.href="stage2.html";
+ },1250);
 }
 
 /* SHOOT SEQUENCE */
@@ -758,16 +1236,15 @@ function shootArrow(){
   createBurstPieces();
   createHearts();
 
-  /* AUDIO: BALLOON IMPACT AND HEART REVEAL */
+  /* ORIGINAL IMPACT AND REVEAL SOUNDS */
   playBurstSound();
   playRevealChime();
  },1200);
 
- // Direct navigation to Stage 2.
- // No heart zoom, screen wash or fade transition.
+ /* Burst transition continues after the balloon impact */
  setTimeout(()=>{
-  window.location.href="stage2.html";
- },3100);
+  beginBurstTransition();
+ },1450);
 }
 
 /* CLICK AND KEYBOARD */
