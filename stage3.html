@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -985,8 +986,8 @@ button{font-family:inherit}
 
 /* ==========================================
    PREMIUM ROMANTIC SOUND ENGINE
-   Web Audio API - no external files required
-   Soft ambient music + layered cinematic effects
+   Existing Web Audio effects remain unchanged.
+   Page turn and tree growth use your MP3 files only.
 ========================================== */
 
 let romanticAudio=null;
@@ -994,6 +995,29 @@ let audioReady=false;
 let ambientMusicTimer=null;
 let ambientChordIndex=0;
 let ambientMusicStarted=false;
+
+/* YOUR EXTERNAL AUDIO FILES */
+const pageTurnAudio=new Audio("images/page-turn.mp3");
+pageTurnAudio.preload="auto";
+pageTurnAudio.volume=0.65;
+
+const treeGrowAudio=new Audio("images/tree-grow.mp3");
+treeGrowAudio.preload="auto";
+treeGrowAudio.volume=0.75;
+
+/* REPLAY AUDIO FROM THE BEGINNING */
+function playExternalAudio(audio){
+ try{
+  audio.pause();
+  audio.currentTime=0;
+
+  const playback=audio.play();
+
+  if(playback&&typeof playback.catch==="function"){
+   playback.catch(()=>{});
+  }
+ }catch(error){}
+}
 
 /* CREATE AND UNLOCK AUDIO */
 function unlockRomanticAudio(){
@@ -1253,7 +1277,6 @@ function playBookOpenSound(){
 
  const now=romanticAudio.currentTime;
 
- /* Deep soft opening whoosh */
  createSoundTexture(now,.95,{
   filterType:"lowpass",
   startFrequency:650,
@@ -1262,7 +1285,6 @@ function playBookOpenSound(){
   q:.5
  });
 
- /* Gentle golden shimmer */
  createSoundTexture(now+.28,1.1,{
   filterType:"highpass",
   startFrequency:2100,
@@ -1271,7 +1293,6 @@ function playBookOpenSound(){
   q:.8
  });
 
- /* Warm harmonic swell */
  softTone(261.63,now,2.3,.018,"sine");
  softTone(392,now+.18,2.1,.012,"sine");
  softTone(523.25,now+.38,1.8,.008,"sine");
@@ -1284,7 +1305,6 @@ function playBookCloseSound(){
 
  const now=romanticAudio.currentTime;
 
- /* Low, soft hardcover impact */
  createSoundTexture(now,.48,{
   filterType:"lowpass",
   startFrequency:420,
@@ -1293,7 +1313,6 @@ function playBookCloseSound(){
   q:.55
  });
 
- /* Leather and paper resonance */
  createSoundTexture(now+.045,.75,{
   filterType:"bandpass",
   startFrequency:1250,
@@ -1302,29 +1321,14 @@ function playBookCloseSound(){
   q:.65
  });
 
- /* Gentle closing resonance */
  softTone(174.61,now,.95,.025,"sine");
  softTone(261.63,now+.08,1.15,.012,"sine");
 }
 
 
-/* TREE GROWTH CINEMATIC SWELL */
+/* TREE GROWTH AUDIO — YOUR MP3 ONLY */
 function playTreeGrowthSound(){
- if(!romanticAudio)return;
-
- const now=romanticAudio.currentTime;
-
- createSoundTexture(now,2.5,{
-  filterType:"lowpass",
-  startFrequency:280,
-  endFrequency:1800,
-  volume:.035,
-  q:.45
- });
-
- softTone(130.81,now,3,.018,"sine");
- softTone(196,now+.35,2.7,.012,"sine");
- softTone(261.63,now+.7,2.3,.009,"sine");
+ playExternalAudio(treeGrowAudio);
 }
 
 
@@ -1385,20 +1389,18 @@ function playRomanticSound(action){
    playPhotoRevealSound();
    break;
 
-  case "next":
-   softTone(659.25,romanticAudio.currentTime,.7,.0035);
-   break;
+  /* Old page next/previous tones intentionally disabled */
 
+  case "next":
   case "previous":
-   softTone(523.25,romanticAudio.currentTime,.7,.0035);
    break;
 
   case "transition":
    playBookCloseSound();
    break;
 
+  /* Tree growth is handled only by tree-grow.mp3 */
   case "tree":
-   playTreeGrowthSound();
    break;
 
   case "leaves":
@@ -1423,199 +1425,9 @@ function playRomanticSound(action){
 }
 
 
-/* NATURAL PAPER PAGE-TURN SOUND
-   Finger lift → paper flutter → page settling
-   No musical tones or electronic beeps
-*/
+/* PAGE TURN AUDIO — YOUR MP3 ONLY */
 function playPageTurnSound(direction){
- if(!romanticAudio)return;
-
- if(romanticAudio.state==="suspended"){
-  romanticAudio.resume();
- }
-
- try{
-  const ctx=romanticAudio;
-  const now=ctx.currentTime;
-  const sampleRate=ctx.sampleRate;
-
-  /*
-   * Create a natural paper-rustle recording texture.
-   * Irregular small movements make it feel less synthetic.
-   */
-  function makePaperLayer(options){
-   const duration=options.duration;
-   const length=Math.floor(sampleRate*duration);
-   const buffer=ctx.createBuffer(1,length,sampleRate);
-   const data=buffer.getChannelData(0);
-
-   let lowNoise=0;
-   let midNoise=0;
-
-   const flutterPoints=[
-    .08,.14,.205,.29,.36,.445,.51,.60,.68,.76
-   ];
-
-   for(let i=0;i<length;i++){
-    const t=i/sampleRate;
-    const progress=t/duration;
-
-    const white=Math.random()*2-1;
-
-    lowNoise=lowNoise*.91+white*.09;
-    midNoise=midNoise*.56+white*.44;
-
-    let flutter=0;
-
-    for(let j=0;j<flutterPoints.length;j++){
-     const distance=Math.abs(progress-flutterPoints[j]);
-     flutter+=Math.max(0,1-distance/.045)*.22;
-    }
-
-    const attack=Math.min(1,t/.035);
-    const release=Math.min(1,(duration-t)/.16);
-
-    let movement;
-
-    if(options.kind==="lift"){
-     movement=Math.pow(Math.sin(Math.PI*Math.min(1,progress)),.7);
-    }else if(options.kind==="settle"){
-     movement=Math.exp(-progress*4.2);
-    }else{
-     movement=.52+flutter;
-    }
-
-    const texture=
-     lowNoise*.42+
-     midNoise*.58;
-
-    data[i]=texture*movement*attack*release;
-   }
-
-   const source=ctx.createBufferSource();
-   const filter=ctx.createBiquadFilter();
-   const gain=ctx.createGain();
-
-   source.buffer=buffer;
-   filter.type=options.filter||"bandpass";
-
-   const startFrequency=options.startFrequency;
-   const endFrequency=options.endFrequency;
-
-   filter.frequency.setValueAtTime(
-    startFrequency,
-    now+options.delay
-   );
-
-   filter.frequency.exponentialRampToValueAtTime(
-    endFrequency,
-    now+options.delay+duration
-   );
-
-   filter.Q.value=options.q||.65;
-
-   const start=now+options.delay;
-
-   gain.gain.setValueAtTime(.0001,start);
-   gain.gain.linearRampToValueAtTime(
-    options.volume,
-    start+.045
-   );
-   gain.gain.setValueAtTime(
-    options.volume,
-    start+duration*.45
-   );
-   gain.gain.exponentialRampToValueAtTime(
-    .0001,
-    start+duration
-   );
-
-   source.connect(filter);
-   filter.connect(gain);
-   gain.connect(ctx.destination);
-
-   source.start(start);
-   source.stop(start+duration+.025);
-  }
-
-  /*
-   * 1. The fingertip catches and lifts the edge of the page.
-   * A short, delicate dry-paper friction sound.
-   */
-  makePaperLayer({
-   kind:"lift",
-   delay:0,
-   duration:.24,
-   filter:"highpass",
-   startFrequency:2900,
-   endFrequency:1700,
-   volume:.021,
-   q:.8
-  });
-
-  /*
-   * 2. Main page movement.
-   * A broad soft paper rustle with natural flutter.
-   */
-  makePaperLayer({
-   kind:"rustle",
-   delay:.10,
-   duration:.78,
-   filter:"bandpass",
-   startFrequency:1900,
-   endFrequency:850,
-   volume:.043,
-   q:.48
-  });
-
-  /*
-   * 3. Fine paper surface texture.
-   * This gives the light papery shhh sound during the flip.
-   */
-  makePaperLayer({
-   kind:"rustle",
-   delay:.16,
-   duration:.62,
-   filter:"highpass",
-   startFrequency:4300,
-   endFrequency:2200,
-   volume:.012,
-   q:.55
-  });
-
-  /*
-   * 4. The page lands gently against the other pages.
-   * Soft low-frequency paper flap, not a hard thump.
-   */
-  makePaperLayer({
-   kind:"settle",
-   delay:.66,
-   duration:.27,
-   filter:"lowpass",
-   startFrequency:650,
-   endFrequency:230,
-   volume:.025,
-   q:.55
-  });
-
-  /*
-   * Direction changes the subtle movement character
-   * without changing the page-turn timing.
-   */
-  if(direction===-1){
-   makePaperLayer({
-    kind:"lift",
-    delay:.035,
-    duration:.19,
-    filter:"bandpass",
-    startFrequency:1500,
-    endFrequency:2300,
-    volume:.009,
-    q:.7
-   });
-  }
-
- }catch(error){}
+ playExternalAudio(pageTurnAudio);
 }
 
 
@@ -1733,7 +1545,6 @@ async function showMemory(index){
   document.getElementById("progressText").textContent=
    "MEMORY "+String(index+1).padStart(2,"0")+" OF 09 • FOREVER US";
 
-  /* MEMORY REVEAL SOUND */
   playRomanticSound("reveal");
 
  },130);
@@ -1752,13 +1563,8 @@ function openBook(){
 
  bookOpened=true;
 
- /* INITIAL USER INTERACTION UNLOCKS MOBILE AUDIO */
  unlockRomanticAudio();
-
- /* START CONTINUOUS ROMANTIC BACKGROUND MUSIC */
  startAmbientMusic();
-
- /* MAGICAL BOOK OPEN SOUND */
  playRomanticSound("open");
 
  book.classList.add("open");
@@ -1827,9 +1633,8 @@ function turnPage(direction){
 
  pageBusy=true;
 
- /* PAGE TURN AUDIO + FALLING HEARTS */
+ /* ONLY YOUR PAGE-TURN MP3 + FALLING HEARTS */
  playPageTurnSound(direction);
- playRomanticSound(direction===1?"next":"previous");
  releasePageTurnHearts();
 
  flipSheet.className="flip-sheet active";
@@ -1863,9 +1668,6 @@ function turnPage(direction){
 function closeBookAndGrowTree(){
  if(!bookOpened)return;
 
- bookOpened=false;
-
- /* PREMIUM HARDCOVER CLOSING SOUND */
  playRomanticSound("transition");
 
  swipeGuide.classList.remove("visible");
@@ -2073,7 +1875,6 @@ function createFruits(){
   setTimeout(()=>{
    fruit.classList.add("visible");
 
-   /* INDIVIDUAL PHOTO REVEAL SOUND */
    playRomanticSound("reveal");
 
   },i*100);
@@ -2119,8 +1920,8 @@ function startTree(){
 
  seedling.style.removeProperty("animation");
 
- /* MAGICAL TREE GROWTH SOUND */
- playRomanticSound("tree");
+ /* ONLY YOUR TREE-GROW MP3 — NO OLD SYNTHETIC TREE SOUND */
+ playTreeGrowthSound();
 
  tree.classList.add("growing");
 
@@ -2129,7 +1930,6 @@ function startTree(){
 
   tree.classList.add("leaves-ready");
 
-  /* HEART CANOPY SPARKLE SOUND */
   playRomanticSound("leaves");
 
  },2500));
@@ -2140,14 +1940,12 @@ function startTree(){
 }
 
 function restartTree(){
- /* RESTART SOUND */
  playRomanticSound("restart");
 
  startTree();
 }
 
 function goStage4(){
- /* ROMANTIC LETTER TRANSITION SOUND */
  playRomanticSound("letter");
 
  setTimeout(()=>{
@@ -2161,6 +1959,12 @@ window.addEventListener("resize",()=>{
  if(tree.classList.contains("show")&&tree.classList.contains("leaves-ready")){
   createHeartLeaves();
  }
+});
+
+/* Stop the two external effects when leaving this page */
+window.addEventListener("pagehide",()=>{
+ pageTurnAudio.pause();
+ treeGrowAudio.pause();
 });
 
 </script>
