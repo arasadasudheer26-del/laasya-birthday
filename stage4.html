@@ -13,26 +13,36 @@ body{min-height:100vh;overflow-x:hidden;color:#f7e8cb;font-family:'Cormorant Gar
 canvas{display:block}
 #bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 .page{position:relative;z-index:2;min-height:100vh;padding:20px 14px 55px;display:flex;flex-direction:column;align-items:center}
-.foil{background:linear-gradient(100deg,#8a5a24,#f7dc9a 28%,#fff7da 42%,#c28d41 58%,#f3d28b 78%,#8a5a24);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:foil 7s linear infinite;filter:drop-shadow(0 2px 3px #000a)}
+.foil{display:inline-block;max-width:100%;padding:.16em .24em .3em;margin:-.16em -.24em -.3em;background:linear-gradient(100deg,#8a5a24,#f7dc9a 28%,#fff7da 42%,#c28d41 58%,#f3d28b 78%,#8a5a24);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:foil 7s linear infinite;filter:drop-shadow(0 2px 3px #000a)}
 @keyframes foil{to{background-position:-250% 0}}
 
 /* HERO */
-.top-heading{text-align:center;margin-bottom:22px}
-#heart{width:min(250px,64vw);height:min(215px,55vw);margin:0 auto -6px}
+.top-heading{text-align:center;margin:0 -10px 40px;padding:0;align-self:stretch;position:relative;z-index:3}
+#tt{max-width:none}
+#heart{width:min(280px,72vw);height:min(245px,62vw);margin:0 auto -10px}
 .top-heading .small{color:#d7b879;font-size:12px;letter-spacing:5px;text-transform:uppercase}
-.top-heading h1{font-family:'Great Vibes',cursive;font-size:clamp(42px,10vw,66px);font-weight:400;margin-top:6px;line-height:1.1}
-.top-heading p{color:#e4cda9;font-size:17px;margin-top:4px}
+.top-heading h1{font-family:'Great Vibes',cursive;font-size:44px;font-weight:400;margin-top:10px;line-height:1.3;white-space:nowrap;text-align:center}
+.top-heading p{color:#e4cda9;font-size:17px;margin-top:14px;line-height:1.4}
 
 /* 3D PHOTO */
-.pf-wrap{perspective:900px;margin:8px auto 42px}
+.pf-wrap{perspective:900px;margin:26px auto 46px;position:relative;z-index:1}
 .photo-frame{position:relative;width:min(290px,82vw);padding:11px 11px 0;background:linear-gradient(135deg,#f6dfa6,#9b713c 45%,#ecd08f 70%,#8b6338);border:2px solid #f0d596;outline:2px solid #8b6338;outline-offset:5px;box-shadow:0 22px 40px #000b,0 0 0 1px #5a3b1c,inset 0 0 0 1px #fff6;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) rotate(-1deg);transition:transform .25s ease-out}
-.photo-frame img{display:block;width:100%;height:auto;aspect-ratio:1006/1330;object-fit:cover;border:5px solid #ead8b5;background:#d8c09a;box-shadow:inset 0 0 14px #0006}
+.photo-frame img{display:block;width:100%;height:auto;object-fit:contain;border:5px solid #ead8b5;background:#d8c09a;box-shadow:inset 0 0 14px #0006}
 .photo-frame:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--mx,30%) var(--my,20%),#fff6d855,transparent 55%);mix-blend-mode:screen}
 .photo-caption{text-align:center;color:#3b2417;background:linear-gradient(#ead3a0,#d2b074);font-family:'Great Vibes',cursive;font-size:27px;padding:8px 2px 10px}
 
-.scroll-intro{text-align:center;margin-bottom:28px}
+.scroll-intro{text-align:center;margin:0 -10px 28px;align-self:stretch}
+.crown-wrap{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:2px}
+.cl{height:1px;width:min(72px,18vw);background:linear-gradient(90deg,transparent,#e4c17e)}.cl.r{transform:scaleX(-1)}
+.crown-box{position:relative;display:block;width:84px;height:64px}
+.crown-svg{width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 0 10px #f0c06a99) drop-shadow(0 4px 4px #000b);animation:cglow 3.2s ease-in-out infinite}
+@keyframes cglow{50%{transform:translateY(-3px);filter:drop-shadow(0 0 20px #ffd98a) drop-shadow(0 5px 5px #000b) brightness(1.12)}}
+.sp{position:absolute;font-style:normal;color:#ffe9b0;text-shadow:0 0 8px #ffd98a;animation:tw 2.2s ease-in-out infinite;opacity:0}
+.sp.s1{left:-16px;top:6px;font-size:14px}.sp.s2{right:-14px;top:-4px;font-size:18px;animation-delay:.7s}.sp.s3{right:-10px;bottom:2px;font-size:11px;animation-delay:1.4s}
+@keyframes tw{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(25deg)}}
+#tt2{max-width:none}
 .crown{font-size:34px}
-.scroll-intro h2{font-family:'Great Vibes',cursive;font-size:43px;font-weight:400;margin:5px 0}
+.scroll-intro h2{font-family:'Great Vibes',cursive;font-size:44px;font-weight:400;margin:10px 0 6px;line-height:1.35;white-space:nowrap;text-align:center}
 .scroll-intro p{color:#e4cda9;font-size:16px}
 
 /* SCROLL */
@@ -85,7 +95,7 @@ background-blend-mode:normal,normal,multiply,normal,normal,normal,normal;box-sha
 .footer-note{margin-top:30px;text-align:center;color:#d8bd91;font-family:'Great Vibes',cursive;font-size:25px}
 .back-link{display:inline-block;margin-top:30px;padding:12px 23px;color:#f1d8a6;text-decoration:none;border:1px solid #c5a36a;border-radius:30px;font-size:17px}
 @media(max-width:480px){.page{padding:14px 11px 45px}.parchment{padding:29px 19px 38px}.letter-body{font-size:32px;line-height:1.23}.letter-body .telugu-line{font-size:31px}.letter-greeting{font-size:37px}.royal-heading h2{font-size:43px}.signature{font-size:45px}.roller{height:42px}.roller-text{font-size:10px}}
-@media(prefers-reduced-motion:reduce){.foil,.seal{animation:none}}
+@media(prefers-reduced-motion:reduce){.foil,.seal,.crown-svg,.sp{animation:none}}
 </style>
 </head>
 <body>
@@ -97,7 +107,7 @@ background-blend-mode:normal,normal,multiply,normal,normal,normal,normal;box-sha
 <header class="top-heading">
  <canvas id="heart"></canvas>
  <div class="small">A little piece of my heart</div>
- <h1 class="foil">For My Dearest Laasya</h1>
+ <h1 id="title"><span class="foil" id="tt">For My Dearest Laasya</span></h1>
  <p>With all my love, today and always ❤️</p>
 </header>
 
@@ -109,8 +119,17 @@ background-blend-mode:normal,normal,multiply,normal,normal,normal,normal;box-sha
 </div>
 
 <div class="scroll-intro">
- <div class="crown foil">♛</div>
- <h2 class="foil">A King's Letter to His Queen</h2>
+ <div class="crown-wrap"><span class="cl"></span>
+  <span class="crown-box"><i class="sp s1">✦</i><i class="sp s2">✦</i><i class="sp s3">✧</i>
+  <svg class="crown-svg" viewBox="0 0 120 92" aria-hidden="true"><defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff4c9"/><stop offset=".35" stop-color="#f3cf86"/><stop offset=".7" stop-color="#c58d3f"/><stop offset="1" stop-color="#8a5a24"/></linearGradient><radialGradient id="rg" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ff9db1"/><stop offset=".5" stop-color="#e0245e"/><stop offset="1" stop-color="#7a0c2b"/></radialGradient></defs>
+   <path d="M10 72 L17 28 L40 50 L60 14 L80 50 L103 28 L110 72 Z" fill="url(#cg)" stroke="#fff0bd" stroke-width="2" stroke-linejoin="round"/>
+   <rect x="9" y="70" width="102" height="15" rx="5" fill="url(#cg)" stroke="#fff0bd" stroke-width="2"/>
+   <path d="M20 36 L38 54 M60 22 L60 66 M100 36 L82 54" stroke="#fff7d8" stroke-width="2" opacity=".55" fill="none"/>
+   <circle cx="17" cy="24" r="6" fill="url(#rg)" stroke="#fff0bd" stroke-width="1.5"/><circle cx="60" cy="10" r="7" fill="url(#rg)" stroke="#fff0bd" stroke-width="1.5"/><circle cx="103" cy="24" r="6" fill="url(#rg)" stroke="#fff0bd" stroke-width="1.5"/>
+   <circle cx="34" cy="77.5" r="4" fill="url(#rg)"/><circle cx="60" cy="77.5" r="5.5" fill="url(#rg)" stroke="#fff0bd" stroke-width="1"/><circle cx="86" cy="77.5" r="4" fill="url(#rg)"/>
+   <path d="M18 66 Q34 60 50 64" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".45" fill="none"/></svg></span>
+ <span class="cl r"></span></div>
+ <h2 id="title2"><span class="foil" id="tt2">A King's Letter to His Queen</span></h2>
  <p>A promise written from the depths of my heart ❤️</p>
 </div>
 
@@ -177,6 +196,11 @@ background-blend-mode:normal,normal,multiply,normal,normal,normal,normal;box-sha
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const $=id=>document.getElementById(id);
+/* ---------- one-line title, as big as the screen allows, never cut ---------- */
+function fitOne(h,t,mx){h.style.fontSize="100px";const w=t.offsetWidth-48,a=h.parentElement.clientWidth;h.style.fontSize=Math.max(22,Math.min(mx,a*.97*100/w))+"px"}
+function fitTitle(){fitOne($("title"),$("tt"),76);fitOne($("title2"),$("tt2"),70)}
+fitTitle();addEventListener("resize",fitTitle);addEventListener("load",fitTitle);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitTitle);
+
 
 /* ---------- LETTER LOGIC (your music + parchment sound kept) ---------- */
 const paperWindow=$("paperWindow"),parchment=$("parchment"),scrollCover=$("scrollCover"),openButton=$("openButton"),closeButton=$("closeButton"),scrollHint=$("scrollHint");
@@ -238,7 +262,7 @@ petals.frustumCulled=false;bs.add(petals);
 const dust=sparks(bs,110,.2,["#f6dca8","#e4c17e","#fff1c9"],[28,22,12]);
 
 /* hero: glossy ruby heart + gold ring + orbiting sparks */
-const hr=mk($("heart")),hs=new THREE.Scene(),hc=new THREE.PerspectiveCamera(40,1,.1,50);hc.position.z=6;hs.environment=env(hr);
+const hr=mk($("heart")),hs=new THREE.Scene(),hc=new THREE.PerspectiveCamera(40,1,.1,50);hc.position.z=7;hs.environment=env(hr);
 hs.add(new THREE.AmbientLight(0xffffff,.35));const hl=new THREE.DirectionalLight(0xfff0d0,.8);hl.position.set(3,4,5);hs.add(hl);
 const sh=new THREE.Shape();sh.moveTo(0,-1);sh.bezierCurveTo(-.2,-.8,-1,-.2,-1,.35);sh.bezierCurveTo(-1,.9,-.35,1.1,0,.6);sh.bezierCurveTo(.35,1.1,1,.9,1,.35);sh.bezierCurveTo(1,-.2,.2,-.8,0,-1);
 const hgm=new THREE.ExtrudeGeometry(sh,{depth:.5,bevelEnabled:true,bevelThickness:.22,bevelSize:.18,bevelSegments:8,curveSegments:24});hgm.center();
