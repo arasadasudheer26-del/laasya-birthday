@@ -9,11 +9,12 @@
 <style>
 :root{--grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E")}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{min-height:100vh;overflow-x:hidden;color:#f7e8cb;font-family:'Cormorant Garamond',serif;background:radial-gradient(ellipse at top,#6a3249 0%,transparent 55%),linear-gradient(145deg,#10070c,#2a101b 55%,#12080e);background-attachment:fixed}
+body{min-height:100vh;overflow-x:hidden;color:#f7e8cb;font-family:'Cormorant Garamond',serif;background:#12080e}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at top,#6a3249 0%,transparent 55%),linear-gradient(145deg,#10070c,#2a101b 55%,#12080e)}
 canvas{display:block}
 #bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-.page{position:relative;z-index:2;min-height:100vh;padding:20px 14px 55px;display:flex;flex-direction:column;align-items:center}
-.foil{display:inline-block;max-width:100%;padding:.16em .24em .3em;margin:-.16em -.24em -.3em;background:linear-gradient(100deg,#8a5a24,#f7dc9a 28%,#fff7da 42%,#c28d41 58%,#f3d28b 78%,#8a5a24);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:foil 7s linear infinite;filter:drop-shadow(0 2px 3px #000a)}
+.page{position:relative;z-index:2;min-height:100vh;min-height:100dvh;padding:20px 14px 55px;display:flex;flex-direction:column;align-items:center}
+.foil{display:inline-block;max-width:100%;padding:.16em .24em .3em;margin:-.16em -.24em -.3em;background:linear-gradient(100deg,#8a5a24,#f7dc9a 28%,#fff7da 42%,#c28d41 58%,#f3d28b 78%,#8a5a24);background-size:100% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 3px #000a)}
 @keyframes foil{to{background-position:-250% 0}}
 
 /* HERO */
@@ -27,7 +28,7 @@ canvas{display:block}
 /* 3D PHOTO */
 .pf-wrap{perspective:900px;margin:26px auto 46px;position:relative;z-index:1}
 .photo-frame{position:relative;width:min(290px,82vw);padding:11px 11px 0;background:linear-gradient(135deg,#f6dfa6,#9b713c 45%,#ecd08f 70%,#8b6338);border:2px solid #f0d596;outline:2px solid #8b6338;outline-offset:5px;box-shadow:0 22px 40px #000b,0 0 0 1px #5a3b1c,inset 0 0 0 1px #fff6;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) rotate(-1deg);transition:transform .25s ease-out}
-.photo-frame img{display:block;width:100%;height:auto;object-fit:contain;border:5px solid #ead8b5;background:#d8c09a;box-shadow:inset 0 0 14px #0006}
+.photo-frame img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:contain;border:5px solid #ead8b5;background:#d8c09a;box-shadow:inset 0 0 14px #0006}
 .photo-frame:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--mx,30%) var(--my,20%),#fff6d855,transparent 55%);mix-blend-mode:screen}
 .photo-caption{text-align:center;color:#3b2417;background:linear-gradient(#ead3a0,#d2b074);font-family:'Great Vibes',cursive;font-size:27px;padding:8px 2px 10px}
 
@@ -36,7 +37,7 @@ canvas{display:block}
 .cl{height:1px;width:min(72px,18vw);background:linear-gradient(90deg,transparent,#e4c17e)}.cl.r{transform:scaleX(-1)}
 .crown-box{position:relative;display:block;width:84px;height:64px}
 .crown-svg{width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 0 10px #f0c06a99) drop-shadow(0 4px 4px #000b);animation:cglow 3.2s ease-in-out infinite}
-@keyframes cglow{50%{transform:translateY(-3px);filter:drop-shadow(0 0 20px #ffd98a) drop-shadow(0 5px 5px #000b) brightness(1.12)}}
+@keyframes cglow{50%{transform:translateY(-3px)}}
 .sp{position:absolute;font-style:normal;color:#ffe9b0;text-shadow:0 0 8px #ffd98a;animation:tw 2.2s ease-in-out infinite;opacity:0}
 .sp.s1{left:-16px;top:6px;font-size:14px}.sp.s2{right:-14px;top:-4px;font-size:18px;animation-delay:.7s}.sp.s3{right:-10px;bottom:2px;font-size:11px;animation-delay:1.4s}
 @keyframes tw{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(25deg)}}
@@ -47,7 +48,7 @@ canvas{display:block}
 
 /* SCROLL */
 .scroll-stage{width:min(650px,95vw);margin:0 auto}
-.scroll{position:relative;width:100%;filter:drop-shadow(0 18px 24px #000a)}
+.scroll{position:relative;width:100%}
 .roller{position:relative;z-index:5;width:100%;height:48px;border-radius:25px;border:2px solid #edcf8c;background:linear-gradient(180deg,#fbeab8 0%,#d4a45e 16%,#8c5b30 46%,#5f3a1d 60%,#b98846 82%,#f4dba2 100%);box-shadow:0 7px 12px #000a,inset 0 2px 3px #fff9,inset 0 -3px 4px #4b2c14;display:flex;align-items:center;justify-content:space-between;padding:0 12px}
 .roller:before{content:"";position:absolute;left:9%;right:9%;top:7px;height:3px;background:linear-gradient(90deg,transparent,#fffa,transparent);border-radius:50%}
 .roller-end{width:26px;height:26px;border-radius:50%;border:2px solid #f5d995;background:radial-gradient(circle at 35% 30%,#fff0c4,#a8733a 55%,#5c3a1b);box-shadow:0 2px 5px #000a,inset 0 -2px 3px #3d250f}
@@ -60,7 +61,7 @@ canvas{display:block}
 .seal:active{transform:scale(.94)}
 @keyframes pulse{50%{box-shadow:0 6px 10px #0009,inset 0 3px 5px #ff9aa855,inset 0 -5px 8px #3a0410,0 0 0 5px #8a0e26,0 0 0 7px #5b0716,0 0 24px 8px #ff3b5c55}}
 
-.paper-window{width:100%;height:0;overflow:hidden;border-inline:2px solid #b78b4e;background:#ead8b5;transition:height 3s cubic-bezier(.22,.75,.22,1)}
+.paper-window{width:100%;height:0;overflow:hidden;box-shadow:0 22px 30px -14px #000c;border-inline:2px solid #b78b4e;background:#ead8b5;transition:height 3s cubic-bezier(.22,.75,.22,1)}
 .paper-window.open{height:var(--paper-height)}
 .parchment{position:relative;width:100%;padding:38px 27px 42px;color:#392315;background-color:#ead8b5;
 background-image:linear-gradient(180deg,#4d2e1466,transparent 32px),linear-gradient(0deg,#4d2e1466,transparent 32px),var(--grain),radial-gradient(ellipse at 8% 8%,#8b5b2a2b,transparent 38%),radial-gradient(ellipse at 92% 90%,#8b5b2a29,transparent 40%),radial-gradient(ellipse at 50% 50%,#fff8dc59,transparent 75%),linear-gradient(120deg,#f2e2c2,#e5cfa5 50%,#f2e2c2);
@@ -73,7 +74,7 @@ background-blend-mode:normal,normal,multiply,normal,normal,normal,normal;box-sha
 .royal-heading h2{font-family:'Great Vibes',cursive;font-size:clamp(39px,8vw,58px);font-weight:400;line-height:1.15;color:#542d20;margin:9px 0}
 .gold-divider{display:flex;align-items:center;justify-content:center;gap:10px;color:#956b36;margin:17px 0 22px}
 .gold-divider:before,.gold-divider:after{content:"";width:65px;height:1px;background:#a17a45}
-.letter-greeting,.letter-body p,.signature,.closing{opacity:0;transform:translateY(10px);filter:blur(2px);transition:opacity .9s ease,transform .9s ease,filter .9s ease}
+.letter-greeting,.letter-body p,.signature,.closing{opacity:0;transform:translateY(10px);transition:opacity .9s ease,transform .9s ease}
 .in{opacity:1!important;transform:none!important;filter:none!important}
 .letter-greeting{font-family:'Tangerine',cursive;font-size:40px;font-weight:700;color:#492b1d;margin-bottom:15px}
 .letter-body{font-family:'Tangerine',cursive;font-size:35px;line-height:1.25;font-weight:700;color:#392719;text-align:left;overflow-wrap:break-word}
@@ -84,7 +85,7 @@ background-blend-mode:normal,normal,multiply,normal,normal,normal,normal;box-sha
 .signature{font-family:'Tangerine',cursive;font-size:50px;font-weight:700;margin-top:3px;color:#6d302b;line-height:1.2}
 .letter-bottom{text-align:center;margin-top:25px;color:#8b632f;font-size:22px;letter-spacing:5px}
 .letter-memory{width:min(290px,85%);margin:30px auto 15px;padding:8px 8px 0;background:linear-gradient(135deg,#f6dfa6,#9b713c 50%,#e8c987);border:2px solid #d7b879;box-shadow:0 10px 22px #0006;transform:rotate(-1deg)}
-.letter-memory img{display:block;width:100%;height:auto;border:4px solid #ead8b5}
+.letter-memory img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:contain;border:4px solid #ead8b5}
 .letter-memory-caption{text-align:center;color:#3b2417;font-family:'Great Vibes',cursive;font-size:24px;padding:7px;background:#e4c991}
 .bottom-roller{margin-top:-2px}
 .scroll-controls{text-align:center;margin:24px auto 0}
@@ -95,6 +96,7 @@ background-blend-mode:normal,normal,multiply,normal,normal,normal,normal;box-sha
 .footer-note{margin-top:30px;text-align:center;color:#d8bd91;font-family:'Great Vibes',cursive;font-size:25px}
 .back-link{display:inline-block;margin-top:30px;padding:12px 23px;color:#f1d8a6;text-decoration:none;border:1px solid #c5a36a;border-radius:30px;font-size:17px}
 @media(max-width:480px){.page{padding:14px 11px 45px}.parchment{padding:29px 19px 38px}.letter-body{font-size:32px;line-height:1.23}.letter-body .telugu-line{font-size:31px}.letter-greeting{font-size:37px}.royal-heading h2{font-size:43px}.signature{font-size:45px}.roller{height:42px}.roller-text{font-size:10px}}
+#title,#title2{opacity:0;transition:opacity .4s ease}html.ready #title,html.ready #title2{opacity:1}
 @media(prefers-reduced-motion:reduce){.foil,.seal,.crown-svg,.sp{animation:none}}
 </style>
 </head>
@@ -196,52 +198,57 @@ background-blend-mode:normal,normal,multiply,normal,normal,normal,normal;box-sha
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const $=id=>document.getElementById(id);
-/* ---------- one-line title, as big as the screen allows, never cut ---------- */
-function fitOne(h,t,mx){h.style.fontSize="100px";const w=t.offsetWidth-48,a=h.parentElement.clientWidth;h.style.fontSize=Math.max(22,Math.min(mx,a*.97*100/w))+"px"}
-function fitTitle(){fitOne($("title"),$("tt"),76);fitOne($("title2"),$("tt2"),70)}
-fitTitle();addEventListener("resize",fitTitle);addEventListener("load",fitTitle);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitTitle);
-
+/* ---------- one-line titles: fit the screen width at a moderate size, shown only after fonts load (no jump) ---------- */
+function fitOne(h,t,mx){h.style.fontSize="100px";const w=t.offsetWidth-48,a=h.parentElement.clientWidth;h.style.fontSize=Math.max(28,Math.min(mx,a*.88*100/w)).toFixed(1)+"px"}
+let fitW=0;
+function fitTitle(force){const w=document.documentElement.clientWidth;if(!force&&Math.abs(w-fitW)<2)return;fitW=w;fitOne($("title"),$("tt"),54);fitOne($("title2"),$("tt2"),50)}
+const showTitles=()=>{fitTitle(true);document.documentElement.classList.add("ready")};
+Promise.race([(document.fonts&&document.fonts.load?Promise.all([document.fonts.load('48px "Great Vibes"'),document.fonts.ready]):Promise.resolve()),new Promise(r=>setTimeout(r,1800))]).then(showTitles);
+addEventListener("resize",()=>fitTitle());
 
 /* ---------- LETTER LOGIC (your music + parchment sound kept) ---------- */
 const paperWindow=$("paperWindow"),parchment=$("parchment"),scrollCover=$("scrollCover"),openButton=$("openButton"),closeButton=$("closeButton"),scrollHint=$("scrollHint");
 const music=$("backgroundMusic"),parch=$("parchmentSound");music.volume=.38;parch.volume=.78;
 const playParch=()=>{parch.pause();parch.currentTime=0;parch.play().catch(()=>{})};
-let ac,isOpen=false,rv=[];
+let ac,isOpen=false,rv=[],settleT=0;
 function chime(){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();const n=ac.currentTime;
  [523.25,659.25,783.99,1046.5].forEach((f,k)=>[[1,1],[2.76,.3],[5.4,.1]].forEach(([m,a],i)=>{const o=ac.createOscillator(),g=ac.createGain(),t=n+.2+k*.2;o.frequency.value=f*m;
   g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.04*a,t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+2.4/(1+i));o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+2.5)}))}catch(e){}}
 const paras=()=>[...document.querySelectorAll(".letter-greeting,.letter-body p,.closing,.signature")];
 function openScroll(){
- if(isOpen)return;isOpen=true;music.play().catch(()=>{});playParch();chime();
+ if(isOpen)return;isOpen=true;clearTimeout(settleT);music.play().catch(()=>{});playParch();chime();
  paperWindow.style.setProperty("--paper-height",parchment.scrollHeight+"px");
  scrollCover.style.height="0";scrollCover.style.opacity="0";scrollCover.style.overflow="hidden";
  requestAnimationFrame(()=>requestAnimationFrame(()=>paperWindow.classList.add("open")));
+ settleT=setTimeout(()=>{if(isOpen)paperWindow.style.height="auto"},3300);
  openButton.style.display="none";closeButton.style.display="inline-block";
  scrollHint.textContent="❤️ A letter written only for you, my Queen ❤️";
  paras().forEach((p,i)=>setTimeout(()=>p.classList.add("in"),700+i*420));
  setTimeout(()=>$("scroll").scrollIntoView({behavior:"smooth",block:"start"}),400)}
 function closeScroll(){
- if(!isOpen)return;isOpen=false;playParch();paperWindow.classList.remove("open");
+ if(!isOpen)return;isOpen=false;clearTimeout(settleT);playParch();paperWindow.style.height=paperWindow.offsetHeight+"px";void paperWindow.offsetHeight;paperWindow.style.height="";paperWindow.classList.remove("open");
  paras().forEach(p=>p.classList.remove("in"));
  scrollCover.style.height="150px";scrollCover.style.opacity="1";scrollCover.style.overflow="visible";
  openButton.style.display="inline-block";closeButton.style.display="none";
  scrollHint.textContent="✨ Your letter is safely rolled again ✨";
  $("scroll").scrollIntoView({behavior:"smooth",block:"center"})}
 $("seal").onclick=openScroll;openButton.onclick=openScroll;closeButton.onclick=closeScroll;
-addEventListener("resize",()=>{if(isOpen)paperWindow.style.setProperty("--paper-height",parchment.scrollHeight+"px")});
+new ResizeObserver(()=>{if(isOpen)paperWindow.style.setProperty("--paper-height",parchment.scrollHeight+"px")}).observe(parchment);
+document.querySelectorAll(".photo-frame img,.letter-memory img").forEach(i=>{const f=()=>{if(i.naturalWidth)i.style.aspectRatio=i.naturalWidth+"/"+i.naturalHeight};i.complete?f():i.addEventListener("load",f)});
 
 /* ---------- 3D TILT for the photo frame (finger / mouse / phone gyro) ---------- */
 const pf=$("pf");
 function tilt(x,y){const nx=x/innerWidth-.5,ny=y/innerHeight-.5;pf.style.setProperty("--ry",nx*18+"deg");pf.style.setProperty("--rx",-ny*12+"deg");pf.style.setProperty("--mx",(nx+.5)*100+"%");pf.style.setProperty("--my",(ny+.5)*100+"%")}
-addEventListener("pointermove",e=>tilt(e.clientX,e.clientY));
-addEventListener("deviceorientation",e=>{if(e.gamma==null)return;const c=v=>Math.max(-30,Math.min(30,v));tilt(innerWidth*(.5+c(e.gamma)/80),innerHeight*(.5+c((e.beta||45)-45)/80))});
+let tq=0,tx=0,ty=0;function qt(x,y){tx=x;ty=y;if(!tq)tq=requestAnimationFrame(()=>{tq=0;tilt(tx,ty)})}
+addEventListener("pointermove",e=>{if(e.pointerType==="mouse")qt(e.clientX,e.clientY)});
+addEventListener("deviceorientation",e=>{if(e.gamma==null)return;const c=v=>Math.max(-30,Math.min(30,v));qt(innerWidth*(.5+c(e.gamma)/80),innerHeight*(.5+c((e.beta||45)-45)/80))});
 
 /* ---------- THREE.JS ---------- */
 function env(r){const pm=new THREE.PMREMGenerator(r),es=new THREE.Scene();es.background=new THREE.Color(0x1d0a16);
  [[0xfff1d6,[6,8,6],[5,5]],[0xff8fb0,[-7,3,4],[4,6]],[0xffd28a,[0,-3,8],[6,2]],[0x9d7bff,[-4,9,-6],[5,3]],[0xffffff,[7,2,-5],[3,6]]].forEach(([c,p,s])=>{
   const m=new THREE.Mesh(new THREE.PlaneGeometry(s[0],s[1]),new THREE.MeshBasicMaterial({color:c,side:THREE.DoubleSide}));m.position.set(...p);m.lookAt(0,0,0);m.material.color.multiplyScalar(1.4);es.add(m)});
  return pm.fromScene(es,.04).texture}
-function mk(canvas){const r=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});r.setPixelRatio(Math.min(devicePixelRatio,1.75));r.outputEncoding=THREE.sRGBEncoding;r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=.9;return r}
+function mk(canvas,dpr){const r=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});r.setPixelRatio(Math.min(devicePixelRatio,dpr||1.5));r.outputEncoding=THREE.sRGBEncoding;r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=.9;return r}
 const dot=(()=>{const c=document.createElement("canvas");c.width=c.height=64;const x=c.getContext("2d"),g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,"#fff");g.addColorStop(.3,"#fff8");g.addColorStop(1,"#fff0");x.fillStyle=g;x.fillRect(0,0,64,64);return new THREE.CanvasTexture(c)})();
 function sparks(scene,n,size,cols,spread){const g=new THREE.BufferGeometry(),p=new Float32Array(n*3),c=new Float32Array(n*3);
  for(let i=0;i<n;i++){p.set([(Math.random()-.5)*spread[0],(Math.random()-.5)*spread[1],(Math.random()-.5)*spread[2]],i*3);const k=new THREE.Color(cols[i%cols.length]);c.set([k.r,k.g,k.b],i*3)}
@@ -249,20 +256,20 @@ function sparks(scene,n,size,cols,spread){const g=new THREE.BufferGeometry(),p=n
  const o=new THREE.Points(g,new THREE.PointsMaterial({size,map:dot,vertexColors:true,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));scene.add(o);return o}
 
 /* falling 3D rose petals */
-const bgR=mk($("bg")),bs=new THREE.Scene(),bc=new THREE.PerspectiveCamera(55,1,.1,100);bc.position.z=12;bs.environment=env(bgR);
+const bgR=mk($("bg"),1),bs=new THREE.Scene(),bc=new THREE.PerspectiveCamera(55,1,.1,100);bc.position.z=12;bs.environment=env(bgR);
 bs.add(new THREE.AmbientLight(0xffffff,.5));const dl=new THREE.DirectionalLight(0xfff0d8,.9);dl.position.set(4,8,8);bs.add(dl);
 const pg=new THREE.PlaneGeometry(1,1.4,6,8),pp=pg.attributes.position;
 for(let i=0;i<pp.count;i++){const x=pp.getX(i),y=pp.getY(i),t=(y+.7)/1.4,w=Math.pow(Math.sin(Math.PI*Math.min(Math.max(t,.001),.999)),.7)*(.35+.65*t)*1.4;
  pp.setXYZ(i,x*w,y,x*x*w*1.6+(t-.5)*(t-.5)*.5)}
 pg.computeVertexNormals();pg.scale(.5,.5,.5);
-const PN=70,petals=new THREE.InstancedMesh(pg,new THREE.MeshStandardMaterial({roughness:.5,metalness:0,side:THREE.DoubleSide,envMapIntensity:.5}),PN),pd=[],dm=new THREE.Object3D();
+const PN=48,petals=new THREE.InstancedMesh(pg,new THREE.MeshStandardMaterial({roughness:.5,metalness:0,side:THREE.DoubleSide,envMapIntensity:.5}),PN),pd=[],dm=new THREE.Object3D();
 const pal=["#7d0a27","#a30f35","#c8143f","#df3a5f","#ee6f8d","#f6a5b9","#b5133a"].map(c=>new THREE.Color(c));
 for(let i=0;i<PN;i++){pd.push({x:(Math.random()-.5)*26,y:(Math.random()-.5)*20,z:(Math.random()-.5)*10-1,rx:Math.random()*6,ry:Math.random()*6,rz:Math.random()*6,sx:.3+Math.random()*.8,sy:.3+Math.random()*.8,v:.35+Math.random()*.5,s:.7+Math.random()*.7,ph:Math.random()*6});petals.setColorAt(i,pal[i%pal.length])}
 petals.frustumCulled=false;bs.add(petals);
-const dust=sparks(bs,110,.2,["#f6dca8","#e4c17e","#fff1c9"],[28,22,12]);
+const dust=sparks(bs,70,.2,["#f6dca8","#e4c17e","#fff1c9"],[28,22,12]);
 
 /* hero: glossy ruby heart + gold ring + orbiting sparks */
-const hr=mk($("heart")),hs=new THREE.Scene(),hc=new THREE.PerspectiveCamera(40,1,.1,50);hc.position.z=7;hs.environment=env(hr);
+const hr=mk($("heart"),1.5),hs=new THREE.Scene(),hc=new THREE.PerspectiveCamera(40,1,.1,50);hc.position.z=7;hs.environment=env(hr);
 hs.add(new THREE.AmbientLight(0xffffff,.35));const hl=new THREE.DirectionalLight(0xfff0d0,.8);hl.position.set(3,4,5);hs.add(hl);
 const sh=new THREE.Shape();sh.moveTo(0,-1);sh.bezierCurveTo(-.2,-.8,-1,-.2,-1,.35);sh.bezierCurveTo(-1,.9,-.35,1.1,0,.6);sh.bezierCurveTo(.35,1.1,1,.9,1,.35);sh.bezierCurveTo(1,-.2,.2,-.8,0,-1);
 const hgm=new THREE.ExtrudeGeometry(sh,{depth:.5,bevelEnabled:true,bevelThickness:.22,bevelSize:.18,bevelSegments:8,curveSegments:24});hgm.center();
@@ -272,8 +279,12 @@ const orb=sparks(hs,26,.16,["#ffe3a0","#ffc2d1","#fff1c9"],[0,0,0]);const oa=orb
 const oi=[...Array(26)].map((_,i)=>({a:i/26*6.283,r:1.6+Math.random()*.7,y:(Math.random()-.5)*1.6,s:.3+Math.random()*.5}));
 hs.add(heart,ring);
 
-function resize(){const w=innerWidth,h=innerHeight;bgR.setSize(w,h,false);bc.aspect=w/h;bc.updateProjectionMatrix();
- const c=$("heart");hr.setSize(c.clientWidth,c.clientHeight,false);hc.aspect=c.clientWidth/c.clientHeight;hc.updateProjectionMatrix()}
+let rw=0,rh=0,hw=0,hh=0,heroOn=true;
+function resize(){const w=innerWidth,h=innerHeight;
+ if(w!==rw||Math.abs(h-rh)>140){rw=w;rh=h;bgR.setSize(w,h,false);bc.aspect=w/h;bc.updateProjectionMatrix()}
+ const c=$("heart"),cw=c.clientWidth,ch=c.clientHeight;
+ if(cw!==hw||ch!==hh){hw=cw;hh=ch;hr.setSize(cw,ch,false);hc.aspect=cw/ch;hc.updateProjectionMatrix()}}
+if("IntersectionObserver"in window)new IntersectionObserver(e=>heroOn=e[0].isIntersecting).observe($("heart"));
 addEventListener("resize",resize);resize();
 let last=performance.now(),T=0;
 (function loop(now){requestAnimationFrame(loop);const dt=Math.min(.05,(now-last)/1000);last=now;T+=dt;
@@ -281,11 +292,11 @@ let last=performance.now(),T=0;
   dm.position.set(d.x+Math.sin(T*.7+d.ph)*.9,d.y,d.z);dm.rotation.set(d.rx+T*d.sx,d.ry+T*d.sy,d.rz+Math.sin(T+d.ph)*.6);dm.scale.setScalar(d.s);dm.updateMatrix();petals.setMatrixAt(i,dm.matrix)}
  petals.instanceMatrix.needsUpdate=true;dust.rotation.y=T*.02;dust.position.y=Math.sin(T*.3)*.4;
  bc.position.x+=((tiltX||0)*1.2-bc.position.x)*.04;bc.lookAt(0,0,0);bgR.render(bs,bc);
- heart.rotation.y=Math.sin(T*.6)*.7+T*.15;heart.position.y=Math.sin(T*1.2)*.08;heart.scale.setScalar(1+Math.pow(Math.max(0,Math.sin(T*3.2)),8)*.07);
- ring.rotation.z=T*.4;
- oi.forEach((o,i)=>oa.setXYZ(i,Math.cos(o.a+T*o.s)*o.r,o.y+Math.sin(T+i)*.1,Math.sin(o.a+T*o.s)*o.r));oa.needsUpdate=true;
- hr.render(hs,hc)})(last);
-var tiltX=0;addEventListener("pointermove",e=>tiltX=e.clientX/innerWidth-.5);
+ if(heroOn){heart.rotation.y=Math.sin(T*.6)*.7+T*.15;heart.position.y=Math.sin(T*1.2)*.08;heart.scale.setScalar(1+Math.pow(Math.max(0,Math.sin(T*3.2)),8)*.07);
+  ring.rotation.z=T*.4;
+  oi.forEach((o,i)=>oa.setXYZ(i,Math.cos(o.a+T*o.s)*o.r,o.y+Math.sin(T+i)*.1,Math.sin(o.a+T*o.s)*o.r));oa.needsUpdate=true;
+  hr.render(hs,hc)}})(last);
+var tiltX=0;addEventListener("pointermove",e=>{if(e.pointerType==="mouse")tiltX=e.clientX/innerWidth-.5});
 </script>
 </body>
 </html>
